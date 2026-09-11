@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="workout-container">
+
+    <h1>AI Workout Planner</h1>
+
+    <form method="POST" action="{{ url_for('ai_workout') }}">
+        <select name="goal" required>
+            <option value="">Select Goal</option>
+            <option>Muscle Gain</option>
+            <option>Weight Loss</option>
+            <option>Strength</option>
+        </select>
+
+        <input type="number" name="days" placeholder="Workout Days per Week" required>
+
+        <select name="level" required>
+            <option value="">Experience Level</option>
+            <option>Beginner</option>
+            <option>Intermediate</option>
+            <option>Advanced</option>
+        </select>
+
+        <button type="submit">Generate Workout</button>
+
+    </form>
+
+    {% if workout_plan %}
+    <div class="workout-result">
+        {% for day, workout in workout_plan.items() %}
+        <div class="workout-day">
+            <h3>{{ day }}</h3>
+            <p>{{ workout }}</p>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2 class="plans-title">Choose Your Fitness Plan</h2>
+
+<div class="plans-container">
+
+    <div class="plan-card">
+        <h3>Monthly Plan</h3>
+        <p class="price">₹1,500</p>
+        <ul>
+            <li>Gym access</li>
+            <li>Basic trainer support</li>
+        </ul>
+        <a href="/register" class="plan-btn">Join Now</a>
+    </div>
+
+    <div class="plan-card">
+        <h3>Quarterly Plan</h3>
+        <p class="price">₹4,000</p>
+        <ul>
+            <li>Gym + cardio access</li>
+            <li>Trainer guidance</li>
+        </ul>
+        <a href="/register" class="plan-btn">Join Now</a>
+    </div>
+
+    <div class="plan-card">
+        <h3>Yearly Plan</h3>
+        <p class="price">₹14,000</p>
+        <ul>
+            <li>Full gym access</li>
+            <li>Personal trainer support</li>
+            <li>Diet consultation</li>
+        </ul>
+        <a href="/register" class="plan-btn">Join Now</a>
+    </div>
+
+</div>
+
+{% endblock %}

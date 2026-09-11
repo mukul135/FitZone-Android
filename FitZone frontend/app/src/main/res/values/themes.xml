@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Theme.FitZone" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
+        <item name="colorSecondary">@color/colorAccentLight</item>
+        <item name="colorSecondaryVariant">@color/colorAccentLighter</item>
+        <item name="android:colorBackground">@color/colorBackground</item>
+        <item name="colorSurface">@color/colorSurface</item>
+        <item name="colorOnBackground">@color/colorTextPrimary</item>
+        <item name="colorOnSurface">@color/colorTextPrimary</item>
+        <item name="colorOnPrimary">@color/colorWhite</item>
+        <item name="android:statusBarColor">@color/colorBackground</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="23">false</item>
+        <item name="materialButtonStyle">@style/Widget.FitZone.Button.Primary</item>
+        <item name="textInputStyle">@style/Widget.FitZone.TextInputLayout</item>
+        <item name="cardViewStyle">@style/Widget.FitZone.Card</item>
+    </style>
+</resources>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorBackground">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorSurface"
+        app:navigationIcon="@drawable/ic_back"
+        app:title="@string/gallery_title"
+        app:titleTextColor="@color/colorTextPrimary" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/spacing_md">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/gallery_areas_title"
+                android:textAppearance="@style/TextAppearance.FitZone.Heading3"
+                android:layout_marginBottom="@dimen/spacing_sm" />
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal" android:layout_marginBottom="@dimen/spacing_sm">
+                <include layout="@layout/item_gallery_cell" android:id="@+id/cellGymArea" />
+                <include layout="@layout/item_gallery_cell" android:id="@+id/cellDumbbell" />
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal" android:layout_marginBottom="@dimen/spacing_sm">
+                <include layout="@layout/item_gallery_cell" android:id="@+id/cellCardio" />
+                <include layout="@layout/item_gallery_cell" android:id="@+id/cellCrossfit" />
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal" android:layout_marginBottom="@dimen/spacing_lg">
+                <include layout="@layout/item_gallery_cell" android:id="@+id/cellPool" />
+                <include layout="@layout/item_gallery_cell" android:id="@+id/cellReception" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/gallery_machines_title"
+                android:textAppearance="@style/TextAppearance.FitZone.Heading3"
+                android:layout_marginBottom="@dimen/spacing_sm" />
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal" android:layout_marginBottom="@dimen/spacing_sm">
+                <include layout="@layout/item_gallery_cell" android:id="@+id/cellBench" />
+                <include layout="@layout/item_gallery_cell" android:id="@+id/cellSquat" />
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal" android:layout_marginBottom="@dimen/spacing_sm">
+                <include layout="@layout/item_gallery_cell" android:id="@+id/cellLegPress" />
+                <include layout="@layout/item_gallery_cell" android:id="@+id/cellCable" />
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <include layout="@layout/item_gallery_cell" android:id="@+id/cellLatPulldown" />
+                <View android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

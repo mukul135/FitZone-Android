@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1 class="page-title">Smart Calorie Calculator</h1>
+
+<div class="form-card">
+
+    <form method="POST">
+
+        <label>Age:</label>
+        <input type="number" name="age" required>
+
+        <label>Weight (kg):</label>
+        <input type="number" step="0.1" name="weight" required>
+
+        <label>Height (cm):</label>
+        <input type="number" step="0.1" name="height" required>
+
+        <label>Gender:</label>
+        <select name="gender" required>
+            <option>Male</option>
+            <option>Female</option>
+        </select>
+
+        <label>Activity Level:</label>
+        <select name="activity" required>
+            <option value="1.2">Sedentary</option>
+            <option value="1.375">Lightly Active</option>
+            <option value="1.55">Moderately Active</option>
+            <option value="1.725">Active</option>
+            <option value="1.9">Very Active</option>
+        </select>
+
+        <label>Goal:</label>
+        <select name="goal" required>
+            <option>Weight Loss</option>
+            <option>Muscle Gain</option>
+            <option>Maintain</option>
+        </select>
+
+        <button type="submit">Calculate Calories</button>
+
+    </form>
+
+    {% if result %}
+    <div class="result-box">
+        <h2>Your Recommended Daily Calories: {{ result }} kcal</h2>
+    </div>
+    {% endif %}
+
+</div>
+
+{% endblock %}

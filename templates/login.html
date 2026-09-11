@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="page-title">Member Login</h1>
+
+<div class="login-container">
+
+    <div class="login-card">
+        <h2>Login to Your Account</h2>
+
+        <form method="POST">
+
+            <label>Email Address</label>
+            <input type="email" name="email" placeholder="Enter your email" required>
+
+            <label>Password</label>
+            <input type="password" name="password" placeholder="Enter your password" required>
+
+            <button type="submit" class="btn-primary">Login</button>
+
+        </form>
+
+        <p class="register-link">
+            Don't have an account? 
+            <a href="/register">Register here</a>
+        </p>
+
+    </div>
+
+</div>
+
+{% endblock %}

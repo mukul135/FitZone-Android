@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1 class="page-title">BMI Calculator</h1>
+
+<div class="form-card">
+
+<form method="POST">
+    <label>Height (cm)</label>
+    <input type="number" name="height" required>
+
+    <label>Weight (kg)</label>
+    <input type="number" name="weight" required>
+
+    <button type="submit">Calculate BMI</button>
+</form>
+
+{% if result %}
+<div class="result-box">
+    <h2>Your BMI: {{ result }}</h2>
+</div>
+{% endif %}
+
+</div>
+
+{% endblock %}

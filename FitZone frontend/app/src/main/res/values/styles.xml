@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- ===== Typography ===== -->
+    <style name="TextAppearance.FitZone.Heading1" parent="TextAppearance.MaterialComponents.Headline4">
+        <item name="android:textColor">@color/colorTextPrimary</item>
+        <item name="android:textSize">28sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.FitZone.Heading2" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="android:textColor">@color/colorTextPrimary</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.FitZone.Heading3" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="android:textColor">@color/colorTextPrimary</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.FitZone.Body" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textColor">@color/colorTextPrimary</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TextAppearance.FitZone.BodySecondary" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:textColor">@color/colorTextSecondary</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="TextAppearance.FitZone.Caption" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textColor">@color/colorTextMuted</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="TextAppearance.FitZone.Button" parent="TextAppearance.MaterialComponents.Button">
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="textAllCaps">false</item>
+    </style>
+
+    <style name="TextAppearance.FitZone.Navigation" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textSize">11sp</item>
+    </style>
+
+    <!-- ===== Base Widget Style ===== -->
+    <style name="Widget.FitZone" parent="" />
+
+    <!-- ===== Buttons ===== -->
+    <style name="Widget.FitZone.Button.Primary" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/colorPrimary</item>
+        <item name="android:textAppearance">@style/TextAppearance.FitZone.Button</item>
+        <item name="cornerRadius">@dimen/radius_pill</item>
+        <item name="android:height">@dimen/button_height</item>
+    </style>
+
+    <style name="Widget.FitZone.Button.Secondary" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/colorSurfaceVariant</item>
+        <item name="android:textColor">@color/colorTextPrimary</item>
+        <item name="cornerRadius">@dimen/radius_pill</item>
+        <item name="android:height">@dimen/button_height</item>
+    </style>
+
+    <style name="Widget.FitZone.Button.Outline" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="strokeColor">@color/colorPrimary</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="cornerRadius">@dimen/radius_pill</item>
+        <item name="android:height">@dimen/button_height</item>
+    </style>
+
+    <style name="Widget.FitZone.Button.Text" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/colorAccentLight</item>
+    </style>
+
+    <!-- ===== Cards ===== -->
+    <style name="Widget.FitZone.Card" parent="Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">@color/colorSurface</item>
+        <item name="cardCornerRadius">@dimen/radius_large</item>
+        <item name="cardElevation">0dp</item>
+        <item name="strokeColor">@color/colorBorder</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="contentPadding">@dimen/spacing_md</item>
+    </style>
+
+    <style name="Widget.FitZone.Card.Selected" parent="Widget.FitZone.Card">
+        <item name="strokeColor">@color/colorPrimary</item>
+        <item name="strokeWidth">2dp</item>
+    </style>
+
+    <!-- ===== Text fields ===== -->
+    <style name="Widget.FitZone.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxCornerRadiusTopStart">@dimen/radius_medium</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/radius_medium</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/radius_medium</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/radius_medium</item>
+        <item name="boxStrokeColor">@color/colorPrimary</item>
+        <item name="boxBackgroundColor">@color/colorInputBackground</item>
+        <item name="hintTextColor">@color/colorTextSecondary</item>
+        <item name="android:textColorHint">@color/colorTextMuted</item>
+        <item name="errorTextColor">@color/colorError</item>
+        <item name="boxStrokeErrorColor">@color/colorError</item>
+    </style>
+
+    <!-- ===== Chips / badges ===== -->
+    <style name="Widget.FitZone.Chip.Primary" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="chipBackgroundColor">@color/colorPrimary</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="chipCornerRadius">@dimen/radius_pill</item>
+    </style>
+
+    <style name="Widget.FitZone.Chip.Secondary" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="chipBackgroundColor">@color/colorSurfaceVariant</item>
+        <item name="android:textColor">@color/colorTextSecondary</item>
+        <item name="chipCornerRadius">@dimen/radius_pill</item>
+    </style>
+
+    <style name="Widget.FitZone.Badge.Success" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="chipBackgroundColor">@color/colorSuccess</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="chipCornerRadius">@dimen/radius_pill</item>
+    </style>
+
+    <!-- ===== List row (Profile-style) ===== -->
+    <style name="Widget.FitZone.ListRow">
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:paddingStart">@dimen/spacing_md</item>
+        <item name="android:paddingEnd">@dimen/spacing_md</item>
+        <item name="android:paddingTop">@dimen/spacing_md</item>
+        <item name="android:paddingBottom">@dimen/spacing_md</item>
+        <item name="android:minHeight">56dp</item>
+    </style>
+
+    <style name="Widget.FitZone.TextInputLayout.ExposedDropdownMenu" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="boxCornerRadiusTopStart">@dimen/radius_medium</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/radius_medium</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/radius_medium</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/radius_medium</item>
+        <item name="boxStrokeColor">@color/colorPrimary</item>
+        <item name="boxBackgroundColor">@color/colorInputBackground</item>
+        <item name="hintTextColor">@color/colorTextSecondary</item>
+        <item name="android:textColorHint">@color/colorTextMuted</item>
+        <item name="errorTextColor">@color/colorError</item>
+        <item name="boxStrokeErrorColor">@color/colorError</item>
+    </style>
+
+
+</resources>

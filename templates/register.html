@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="page-title">Gym Membership Registration</h1>
+<h2 class="sub-title">Register for: {{ program }}</h2>
+
+<form class="register-form" action="#" method="POST">
+
+    <!-- Personal Details -->
+    <div class="section-card">
+        <h3>Personal Details</h3>
+
+        <label>Full Name</label>
+        <input type="text" name="fullname" required>
+
+        <label>Email Address</label>
+        <input type="email" name="email" required>
+
+        <label>Mobile Number</label>
+        <input type="tel" name="mobile" required>
+
+        <label>Password</label>
+        <input type="password" name="password" required>
+
+        <label>Confirm Password</label>
+        <input type="password" name="confirm_password" required>
+
+        <label>Date of Birth</label>
+        <input type="date" name="dob">
+
+        <label>Gender</label>
+        <div class="inline-options">
+            <input type="radio" name="gender" value="Male"> Male
+            <input type="radio" name="gender" value="Female"> Female
+            <input type="radio" name="gender" value="Other"> Other
+        </div>
+    </div>
+
+    <!-- Fitness Info -->
+    <div class="section-card">
+        <h3>Fitness Information</h3>
+
+        <label>Height (cm)</label>
+        <input type="number" name="height">
+
+        <label>Weight (kg)</label>
+        <input type="number" name="weight">
+
+        <label>Fitness Goal</label>
+        <select name="goal">
+            <option value="">Select Goal</option>
+            <option>Weight Loss</option>
+            <option>Muscle Gain</option>
+            <option>Strength Training</option>
+            <option>General Fitness</option>
+        </select>
+    </div>
+
+    <!-- Membership Plan -->
+    <div class="section-card">
+        <h3>Membership Plan</h3>
+        <div class="inline-options">
+            <input type="radio" name="plan" value="1 Month"> 1 Month
+            <input type="radio" name="plan" value="3 Months"> 3 Months
+            <input type="radio" name="plan" value="6 Months"> 6 Months
+            <input type="radio" name="plan" value="12 Months"> 12 Months
+        </div>
+    </div>
+
+    <!-- Medical -->
+    <div class="section-card">
+        <h3>Medical Information</h3>
+        <textarea name="medical_info" rows="3" placeholder="If yes, describe..."></textarea>
+    </div>
+
+    <!-- Emergency -->
+    <div class="section-card">
+        <h3>Emergency Contact</h3>
+
+        <label>Emergency Contact Name</label>
+        <input type="text" name="emergency_name">
+
+        <label>Emergency Contact Number</label>
+        <input type="tel" name="emergency_number">
+    </div>
+
+    <!-- Terms -->
+    <div class="section-card">
+        <div class="inline-options">
+            <input type="checkbox" required>
+            I agree to the Terms & Conditions.
+        </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="form-buttons">
+        <button type="submit" class="btn">Register</button>
+        <button type="reset" class="btn secondary-btn">Reset</button>
+    </div>
+
+</form>
+
+{% endblock %}

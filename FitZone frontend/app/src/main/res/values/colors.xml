@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base -->
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlack">#000000</color>
+
+    <!-- Backgrounds -->
+    <color name="colorBackground">#0D0710</color>
+    <color name="colorSurface">#1A1120</color>
+    <color name="colorSurfaceVariant">#241830</color>
+    <color name="colorInputBackground">#1F1526</color>
+
+    <!-- Purple / violet accent family (from original style.css + Figma) -->
+    <color name="colorPrimary">#8000FF</color>
+    <color name="colorPrimaryVariant">#6A00FF</color>
+    <color name="colorAccentLight">#B84DFF</color>
+    <color name="colorAccentLighter">#D580FF</color>
+    <color name="colorAccentMuted">#C266FF</color>
+
+    <!-- Text -->
+    <color name="colorTextPrimary">#FFFFFF</color>
+    <color name="colorTextSecondary">#C9BFD4</color>
+    <color name="colorTextMuted">#8B8094</color>
+
+    <!-- Borders -->
+    <color name="colorBorder">#332740</color>
+
+    <!-- Status -->
+    <color name="colorSuccess">#3DDC84</color>
+    <color name="colorWarning">#FFB020</color>
+    <color name="colorError">#FF4D4D</color>
+</resources>

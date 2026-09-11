@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1 class="contact-title">Contact Our Branches</h1>
+
+<div class="contact-container">
+
+    <!-- Mumbai -->
+    <div class="contact-card">
+        <h2>Mumbai – Andheri</h2>
+        <p><strong>Phone:</strong> +91 9876543210</p>
+        <p><strong>Email:</strong> mumbai@fitlifegym.com</p>
+        <p><strong>Hours:</strong> 6:00 AM – 10:00 PM</p>
+
+        <a href="https://www.google.com/maps/place/Andheri+West+Mumbai" 
+           target="_blank" class="map-btn">
+           View on Google Maps
+        </a>
+    </div>
+
+    <!-- Pune -->
+    <div class="contact-card">
+        <h2>Pune – Wakad</h2>
+        <p><strong>Phone:</strong> +91 9123456780</p>
+        <p><strong>Email:</strong> pune@fitlifegym.com</p>
+        <p><strong>Hours:</strong> 6:00 AM – 10:00 PM</p>
+
+        <a href="https://www.google.com/maps/place/Wakad+Pune" 
+           target="_blank" class="map-btn">
+           View on Google Maps
+        </a>
+    </div>
+
+    <!-- Nashik -->
+    <div class="contact-card">
+        <h2>Nashik – College Road</h2>
+        <p><strong>Phone:</strong> +91 9988776655</p>
+        <p><strong>Email:</strong> nashik@fitlifegym.com</p>
+        <p><strong>Hours:</strong> 6:00 AM – 9:30 PM</p>
+
+        <a href="https://www.google.com/maps/place/College+Road+Nashik" 
+           target="_blank" class="map-btn">
+           View on Google Maps
+        </a>
+    </div>
+
+</div>
+
+<h2 class="form-title">Send Us a Message</h2>
+
+<form method="POST" action="/contact" class="contact-form">
+    <input type="text" name="name" placeholder="Your Name" required>
+    <input type="email" name="email" placeholder="Your Email" required>
+    <input type="text" name="phone" placeholder="Your Phone">
+    <textarea name="message" placeholder="Your Message" rows="4" required></textarea>
+    <button type="submit">Send Message</button>
+</form>
+
+{% endblock %}

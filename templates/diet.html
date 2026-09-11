@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1 class="page-title">AI Diet Planner</h1>
+
+<div class="form-card">
+
+    <form method="POST">
+        <label>Enter Daily Calories:</label>
+        <input type="number" name="calories" required>
+
+        <label>Select Goal:</label>
+        <select name="goal" required>
+            <option>Weight Loss</option>
+            <option>Muscle Gain</option>
+            <option>Maintain</option>
+        </select>
+
+        <button type="submit">Generate Diet Plan</button>
+    </form>
+
+    {% if plan %}
+    <div class="result-box">
+        <h2>Your AI Diet Plan</h2>
+        <p><strong>Total Calories:</strong> {{ plan.calories }} kcal</p>
+        <p><strong>Protein:</strong> {{ plan.protein }} g</p>
+        <p><strong>Carbohydrates:</strong> {{ plan.carbs }} g</p>
+        <p><strong>Fats:</strong> {{ plan.fats }} g</p>
+
+        <hr>
+
+        <h3>Suggested Meal Structure</h3>
+        <ul>
+            <li><strong>Breakfast:</strong> Oats + Eggs / Paneer + Fruits</li>
+            <li><strong>Lunch:</strong> Rice/Roti + Dal + Chicken/Paneer + Salad</li>
+            <li><strong>Snack:</strong> Nuts + Protein Shake</li>
+            <li><strong>Dinner:</strong> Light carbs + Protein source + Vegetables</li>
+        </ul>
+    </div>
+    {% endif %}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="dashboard-container">
+
+    <h1>Welcome, {{ user }} </h1>
+    <p class="dashboard-subtitle">Your Fitness Control Panel</p>
+
+    <!-- Profile Section -->
+    <div class="dashboard-section">
+        <h2>Your Membership</h2>
+        <div class="dashboard-cards">
+
+            <div class="dashboard-card">
+                <h3>Current Plan</h3>
+                <p>Active Membership</p>
+            </div>
+
+            <div class="dashboard-card">
+                <h3>Fitness Goal</h3>
+                <p>Muscle Gain / Weight Loss</p>
+            </div>
+
+            <div class="dashboard-card">
+                <h3>Status</h3>
+                <p>Active</p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- AI Tools Section -->
+    <div class="dashboard-section">
+        <h2>AI Fitness Tools</h2>
+
+        <div class="dashboard-cards">
+
+            <div class="dashboard-card">
+                <h3>BMI Calculator</h3>
+                <a href="/bmi" class="dashboard-btn">Use Tool</a>
+            </div>
+
+            <div class="dashboard-card">
+                <h3>Calorie Calculator</h3>
+                <a href="/calorie" class="dashboard-btn">Use Tool</a>
+            </div>
+
+            <div class="dashboard-card">
+                <h3>AI Diet Plan</h3>
+                <a href="/diet" class=" dashboard-btn">Use Tool</a>
+            </div>
+
+            <div class="dashboard-card">
+                <h3>Workout Recommendation</h3>
+                <a href="{{ url_for('ai_workout') }}" class="dashboard-btn">Use Tool</a>
+            </div>
+
+           
+        </div>
+
+    <div style="text-align:center; margin-top:40px;">
+        <a href="/logout" class="logout-btn">Logout</a>
+    </div>
+
+</div>
+
+{% endblock %}

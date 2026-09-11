@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/spacing_md">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="FitZone Design System"
+            android:textAppearance="@style/TextAppearance.FitZone.Heading1"
+            android:layout_marginBottom="@dimen/spacing_lg" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Heading 2"
+            android:textAppearance="@style/TextAppearance.FitZone.Heading2" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Body text example"
+            android:textAppearance="@style/TextAppearance.FitZone.Body"
+            android:layout_marginTop="@dimen/spacing_sm" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Secondary body text"
+            android:textAppearance="@style/TextAppearance.FitZone.BodySecondary"
+            android:layout_marginTop="@dimen/spacing_xs" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Caption text"
+            android:textAppearance="@style/TextAppearance.FitZone.Caption"
+            android:layout_marginTop="@dimen/spacing_xs"
+            android:layout_marginBottom="@dimen/spacing_lg" />
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Primary Button"
+            style="@style/Widget.FitZone.Button.Primary"
+            android:layout_marginBottom="@dimen/spacing_sm" />
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Secondary Button"
+            style="@style/Widget.FitZone.Button.Secondary"
+            android:layout_marginBottom="@dimen/spacing_sm" />
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Outline Button"
+            style="@style/Widget.FitZone.Button.Outline"
+            android:layout_marginBottom="@dimen/spacing_lg" />
+
+        <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.FitZone.Card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/spacing_lg">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Standard Card"
+                android:textAppearance="@style/TextAppearance.FitZone.Heading3" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.FitZone.TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email"
+            android:layout_marginBottom="@dimen/spacing_lg">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/previewBottomNav"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/bottom_nav_height"
+            app:menu="@menu/bottom_nav_menu"
+            app:itemIconTint="@color/bottom_nav_item_color"
+            app:itemTextColor="@color/bottom_nav_item_color"
+            android:background="@color/colorSurface" />
+
+    </LinearLayout>
+</ScrollView>
