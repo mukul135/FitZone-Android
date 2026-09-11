@@ -91,15 +91,20 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        // TODO Phase 11: replace with real navigation to BmiCalculatorFragment
-        cardBmi.setOnClickListener(v -> Toast.makeText(requireContext(),
-                "BMI Calculator screen is coming in a later phase", Toast.LENGTH_SHORT).show());
+        cardBmi.setOnClickListener(v -> {
+            requireActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragmentContainer, new BmiCalculatorFragment())
+                    .addToBackStack(null)
+                    .commit();
+        });
 
-        // TODO Phase 11: replace with real navigation to CalorieCalculatorFragment
-        cardCalories.setOnClickListener(v -> Toast.makeText(requireContext(),
-                "Calorie Calculator screen is coming in a later phase", Toast.LENGTH_SHORT).show());
+        cardCalories.setOnClickListener(v -> {
+            requireActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragmentContainer, new CalorieCalculatorFragment())
+                    .addToBackStack(null)
+                    .commit();
+        });
 
-        // TODO Phase 10: replace with real navigation to ProgramsActivity
         tvSeeAll.setOnClickListener(v -> startActivity(
                 new Intent(requireContext(), com.fitzone.app.activities.ProgramsActivity.class)));
 
