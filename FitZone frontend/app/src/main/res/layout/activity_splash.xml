@@ -1,26 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    activity_splash.xml
-    Simple centered app name/logo, matching the dark theme from Phase 6
-    (Theme.FitZone handles the dark background automatically via themes.xml —
-    no explicit background color is set here so it always stays in sync
-    with the design system).
--->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/gym_area">
 
-    <TextView
-        android:id="@+id/textSplashAppName"
+    <!-- A semi-transparent overlay to make text readable over the background image -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#DD090C09" />
+
+    <!-- Center content container -->
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/app_name"
-        android:textAppearance="@style/TextAppearance.FitZone.Heading1"
+        android:orientation="vertical"
+        android:gravity="center"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias="0.45">
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/ic_logo_dumbbell"
+            android:layout_marginBottom="8dp"
+            android:importantForAccessibility="no" />
+
+        <TextView
+            android:id="@+id/textSplashAppName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textAppearance="@style/TextAppearance.FitZone.Heading1"
+            android:textSize="36sp"
+            android:layout_marginBottom="4dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Stronger  ·  Healthier  ·  You"
+            android:textAppearance="@style/TextAppearance.FitZone.BodySecondary"
+            android:textColor="@color/colorTextSecondary" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Your Fitness Journey Starts Here"
+        android:textAppearance="@style/TextAppearance.FitZone.Caption"
+        android:textColor="@color/colorTextSecondary"
+        android:layout_marginBottom="48dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Optional bottom progress bar -->
+    <ProgressBar
+        android:layout_width="80dp"
+        android:layout_height="2dp"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/colorPrimary"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/textSplashAppName"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias="0.95" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

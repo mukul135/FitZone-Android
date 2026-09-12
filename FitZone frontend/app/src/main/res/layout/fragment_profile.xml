@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,7 +10,8 @@
         android:id="@+id/scrollContent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone">
+        android:clipToPadding="false"
+        android:paddingBottom="80dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -17,25 +19,60 @@
             android:orientation="vertical"
             android:padding="@dimen/spacing_md">
 
-            <!-- Header -->
+            <!-- Top Action Bar -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="56dp">
+
+                <ImageView
+                    android:id="@+id/btnBack"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_back"
+                    app:tint="@color/colorWhite" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="Profile"
+                    android:textAppearance="@style/TextAppearance.FitZone.Heading3"
+                    android:textColor="@color/colorWhite" />
+
+                <ImageView
+                    android:id="@+id/btnSettings"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_settings"
+                    app:tint="@color/colorWhite" />
+            </RelativeLayout>
+
+            <!-- User Info Header -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:paddingTop="@dimen/spacing_lg"
-                android:paddingBottom="@dimen/spacing_lg">
+                android:layout_marginTop="@dimen/spacing_md"
+                android:layout_marginBottom="@dimen/spacing_lg">
 
-                <TextView
-                    android:id="@+id/tvAvatarInitials"
-                    android:layout_width="72dp"
-                    android:layout_height="72dp"
+                <!-- Avatar with Lime Background and Dark Icon -->
+                <FrameLayout
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:background="@drawable/bg_avatar_circle"
-                    android:gravity="center"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    tools:text="AJ" />
+                    android:backgroundTint="@color/colorPrimary">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_profile"
+                        app:tint="@color/colorBackground" />
+                </FrameLayout>
 
                 <TextView
                     android:id="@+id/tvName"
@@ -43,6 +80,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_md"
                     android:textAppearance="@style/TextAppearance.FitZone.Heading2"
+                    android:textColor="@color/colorWhite"
                     tools:text="Alex Johnson" />
 
                 <TextView
@@ -51,294 +89,396 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:textAppearance="@style/TextAppearance.FitZone.BodySecondary"
+                    android:textColor="@color/colorTextSecondary"
                     tools:text="alex@example.com" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipGoal"
-                    style="@style/Widget.FitZone.Chip.Primary"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_md"
-                    android:clickable="false"
-                    android:checkable="false"
-                    android:focusable="false"
-                    tools:text="Muscle Gain" />
             </LinearLayout>
 
-            <!-- BMI stat card -->
+            <!-- Menu Item: Personal Information -->
             <com.google.android.material.card.MaterialCardView
                 style="@style/Widget.FitZone.Card"
+                android:id="@+id/cardPersonalInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/spacing_md">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="BMI"
-                        android:textAppearance="@style/TextAppearance.FitZone.Caption" />
-
-                    <TextView
-                        android:id="@+id/tvBmiValue"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:textAppearance="@style/TextAppearance.FitZone.Heading1"
-                        tools:text="22.86" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <!-- Menu rows -->
-            <com.google.android.material.card.MaterialCardView
-                style="@style/Widget.FitZone.Card"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/spacing_md">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:id="@+id/rowPersonalInfo"
-                        style="@style/Widget.FitZone.ListRow"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:clickable="true"
-                        android:focusable="true">
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_profile"
-                            android:contentDescription="@string/profile_personal_information" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_marginStart="@dimen/spacing_md"
-                            android:text="@string/profile_personal_information"
-                            android:textAppearance="@style/TextAppearance.FitZone.Body" />
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/ic_chevron_right"
-                            android:contentDescription="@null" />
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/colorBorder" />
-
-                    <LinearLayout
-                        android:id="@+id/rowFitnessInfo"
-                        style="@style/Widget.FitZone.ListRow"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:clickable="true"
-                        android:focusable="true">
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_bmi"
-                            android:contentDescription="@string/profile_fitness_information" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_marginStart="@dimen/spacing_md"
-                            android:text="@string/profile_fitness_information"
-                            android:textAppearance="@style/TextAppearance.FitZone.Body" />
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/ic_chevron_right"
-                            android:contentDescription="@null" />
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/colorBorder" />
-
-                    <LinearLayout
-                        android:id="@+id/rowMembership"
-                        style="@style/Widget.FitZone.ListRow"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:clickable="true"
-                        android:focusable="true">
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_membership"
-                            android:contentDescription="@string/profile_membership" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_marginStart="@dimen/spacing_md"
-                            android:text="@string/profile_membership"
-                            android:textAppearance="@style/TextAppearance.FitZone.Body" />
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/ic_chevron_right"
-                            android:contentDescription="@null" />
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/colorBorder" />
-
-                    <LinearLayout
-                        android:id="@+id/rowSettings"
-                        style="@style/Widget.FitZone.ListRow"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:clickable="true"
-                        android:focusable="true">
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_settings"
-                            android:contentDescription="@string/profile_settings" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_marginStart="@dimen/spacing_md"
-                            android:text="@string/profile_settings"
-                            android:textAppearance="@style/TextAppearance.FitZone.Body" />
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/ic_chevron_right"
-                            android:contentDescription="@null" />
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/colorBorder" />
-
-                    <LinearLayout
-                        android:id="@+id/rowHelpSupport"
-                        style="@style/Widget.FitZone.ListRow"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:clickable="true"
-                        android:focusable="true">
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_help"
-                            android:contentDescription="@string/profile_help_support" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_marginStart="@dimen/spacing_md"
-                            android:text="@string/profile_help_support"
-                            android:textAppearance="@style/TextAppearance.FitZone.Body" />
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/ic_chevron_right"
-                            android:contentDescription="@null" />
-                    </LinearLayout>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-            <LinearLayout
-                android:id="@+id/rowMore"
-                style="@style/Widget.FitZone.ListRow"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
+                android:layout_marginBottom="12dp"
                 android:clickable="true"
                 android:focusable="true">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/profile_more"
-                    android:textAppearance="@style/TextAppearance.FitZone.Body" />
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_chevron_right"
-                    android:contentDescription="@null" />
-
-            </LinearLayout>
-            <!-- Logout -->
-            <com.google.android.material.card.MaterialCardView
-                style="@style/Widget.FitZone.Card"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/spacing_lg">
-
                 <LinearLayout
-                    android:id="@+id/rowLogout"
-                    style="@style/Widget.FitZone.ListRow"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:clickable="true"
-                    android:focusable="true">
+                    android:gravity="center_vertical">
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_logout"
-                        android:contentDescription="@string/logout" />
+                    <FrameLayout
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@drawable/bg_avatar_circle"
+                        android:backgroundTint="@color/colorSurfaceVariant">
 
-                    <TextView
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_profile"
+                            app:tint="@color/colorPrimary" />
+                    </FrameLayout>
+
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_marginStart="@dimen/spacing_md"
-                        android:text="@string/logout"
-                        android:textColor="@color/colorError"
-                        android:textAppearance="@style/TextAppearance.FitZone.Body" />
+                        android:layout_marginStart="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/profile_personal_information"
+                            android:textAppearance="@style/TextAppearance.FitZone.Body"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorWhite" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Manage your account details"
+                            android:textAppearance="@style/TextAppearance.FitZone.Caption"
+                            android:textColor="@color/colorTextSecondary" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_chevron_right"
+                        app:tint="@color/colorTextSecondary" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
+
+            <!-- Menu Item: Fitness Information -->
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.FitZone.Card"
+                android:id="@+id/cardFitnessInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:clickable="true"
+                android:focusable="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <FrameLayout
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@drawable/bg_avatar_circle"
+                        android:backgroundTint="@color/colorSurfaceVariant">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_bmi"
+                            app:tint="@color/colorPrimary" />
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="My Progress"
+                            android:textAppearance="@style/TextAppearance.FitZone.Body"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorWhite" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Track your fitness journey"
+                            android:textAppearance="@style/TextAppearance.FitZone.Caption"
+                            android:textColor="@color/colorTextSecondary" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_chevron_right"
+                        app:tint="@color/colorTextSecondary" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Menu Item: Membership -->
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.FitZone.Card"
+                android:id="@+id/cardMembership"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:clickable="true"
+                android:focusable="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <FrameLayout
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@drawable/bg_avatar_circle"
+                        android:backgroundTint="@color/colorSurfaceVariant">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_membership"
+                            app:tint="@color/colorPrimary" />
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="My Membership"
+                            android:textAppearance="@style/TextAppearance.FitZone.Body"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorWhite" />
+
+                        <TextView
+                            android:id="@+id/tvMembershipSubtitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Standard Plan"
+                            android:textAppearance="@style/TextAppearance.FitZone.Caption"
+                            android:textColor="@color/colorTextSecondary" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_chevron_right"
+                        app:tint="@color/colorTextSecondary" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Menu Item: Settings -->
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.FitZone.Card"
+                android:id="@+id/cardSettings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:clickable="true"
+                android:focusable="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <FrameLayout
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@drawable/bg_avatar_circle"
+                        android:backgroundTint="@color/colorSurfaceVariant">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_settings"
+                            app:tint="@color/colorPrimary" />
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/profile_settings"
+                            android:textAppearance="@style/TextAppearance.FitZone.Body"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorWhite" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="App preferences &amp; security"
+                            android:textAppearance="@style/TextAppearance.FitZone.Caption"
+                            android:textColor="@color/colorTextSecondary" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_chevron_right"
+                        app:tint="@color/colorTextSecondary" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Menu Item: Help & Support -->
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.FitZone.Card"
+                android:id="@+id/cardHelpSupport"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:clickable="true"
+                android:focusable="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <FrameLayout
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@drawable/bg_avatar_circle"
+                        android:backgroundTint="@color/colorSurfaceVariant">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_help"
+                            app:tint="@color/colorPrimary" />
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/profile_help_support"
+                            android:textAppearance="@style/TextAppearance.FitZone.Body"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorWhite" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Contact us &amp; FAQs"
+                            android:textAppearance="@style/TextAppearance.FitZone.Caption"
+                            android:textColor="@color/colorTextSecondary" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_chevron_right"
+                        app:tint="@color/colorTextSecondary" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Menu Item: More -->
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.FitZone.Card"
+                android:id="@+id/cardMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:clickable="true"
+                android:focusable="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <FrameLayout
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@drawable/bg_avatar_circle"
+                        android:backgroundTint="@color/colorSurfaceVariant">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_tools"
+                            app:tint="@color/colorPrimary" />
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/profile_more"
+                            android:textAppearance="@style/TextAppearance.FitZone.Body"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorWhite" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Additional options"
+                            android:textAppearance="@style/TextAppearance.FitZone.Caption"
+                            android:textColor="@color/colorTextSecondary" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_chevron_right"
+                        app:tint="@color/colorTextSecondary" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Send Message / Logout -->
+            <Button
+                android:id="@+id/btnSendMessage"
+                style="@style/Widget.FitZone.Button.Primary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_md"
+                android:text="Send Message"
+                app:icon="@drawable/ic_help"
+                app:iconTint="@color/colorTextOnPrimary" />
+
+            <Button
+                android:id="@+id/btnLogout"
+                style="@style/Widget.FitZone.Button.Outline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/logout"
+                android:textColor="@color/colorError"
+                app:strokeColor="@color/colorError" />
 
         </LinearLayout>
     </ScrollView>

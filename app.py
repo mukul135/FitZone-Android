@@ -759,11 +759,13 @@ def generate_workout(goal, days, level):
     # ==============================
     elif goal == "Weight Loss":
 
-        split = ["Full Body + Cardio"] * days
+        split = ["Cardio & Core", "Full Body Strength"] * (days // 2)
+        if days % 2 != 0:
+            split.append("Cardio & Core")
 
         exercises = {
-            "Full Body + Cardio":
-            "Circuit Training 30 mins + 20 mins Treadmill + Core Workout"
+            "Cardio & Core": "30 mins Treadmill / Cycling + 15 mins Ab Circuit (Planks, Crunches)",
+            "Full Body Strength": "Dumbbell Squats 3x15, Push-ups 3x15, Dumbbell Rows 3x15, Core Workout"
         }
 
     # ==============================

@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/colorBackground">
+    android:background="@color/colorBackground"
+    android:fitsSystemWindows="true">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -19,27 +20,34 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.FitZone.Card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="@dimen/spacing_md">
+            android:layout_margin="@dimen/spacing_md">
 
-            <TextView style="@style/TextAppearance.FitZone.Caption" android:text="@string/label_full_name" android:layout_width="wrap_content" android:layout_height="wrap_content" />
-            <TextView android:id="@+id/tvFullName" style="@style/TextAppearance.FitZone.Body" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="@dimen/spacing_md" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_lg">
 
-            <TextView style="@style/TextAppearance.FitZone.Caption" android:text="@string/label_email" android:layout_width="wrap_content" android:layout_height="wrap_content" />
-            <TextView android:id="@+id/tvEmail" style="@style/TextAppearance.FitZone.Body" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="@dimen/spacing_md" />
+                <TextView style="@style/TextAppearance.FitZone.Caption" android:text="@string/label_full_name" android:textColor="@color/colorPrimary" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                <TextView android:id="@+id/tvFullName" style="@style/TextAppearance.FitZone.Body" android:textColor="@color/colorWhite" android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="@dimen/spacing_md" />
 
-            <TextView style="@style/TextAppearance.FitZone.Caption" android:text="@string/label_mobile" android:layout_width="wrap_content" android:layout_height="wrap_content" />
-            <TextView android:id="@+id/tvMobile" style="@style/TextAppearance.FitZone.Body" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="@dimen/spacing_md" />
+                <TextView style="@style/TextAppearance.FitZone.Caption" android:text="@string/label_email" android:textColor="@color/colorPrimary" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                <TextView android:id="@+id/tvEmail" style="@style/TextAppearance.FitZone.Body" android:textColor="@color/colorWhite" android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="@dimen/spacing_md" />
 
-            <TextView style="@style/TextAppearance.FitZone.Caption" android:text="@string/label_dob" android:layout_width="wrap_content" android:layout_height="wrap_content" />
-            <TextView android:id="@+id/tvDob" style="@style/TextAppearance.FitZone.Body" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="@dimen/spacing_md" />
+                <TextView style="@style/TextAppearance.FitZone.Caption" android:text="@string/label_mobile" android:textColor="@color/colorPrimary" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                <TextView android:id="@+id/tvMobile" style="@style/TextAppearance.FitZone.Body" android:textColor="@color/colorWhite" android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="@dimen/spacing_md" />
 
-            <TextView style="@style/TextAppearance.FitZone.Caption" android:text="@string/label_gender" android:layout_width="wrap_content" android:layout_height="wrap_content" />
-            <TextView android:id="@+id/tvGender" style="@style/TextAppearance.FitZone.Body" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                <TextView style="@style/TextAppearance.FitZone.Caption" android:text="@string/label_dob" android:textColor="@color/colorPrimary" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                <TextView android:id="@+id/tvDob" style="@style/TextAppearance.FitZone.Body" android:textColor="@color/colorWhite" android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="@dimen/spacing_md" />
 
-        </LinearLayout>
+                <TextView style="@style/TextAppearance.FitZone.Caption" android:text="@string/label_gender" android:textColor="@color/colorPrimary" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                <TextView android:id="@+id/tvGender" style="@style/TextAppearance.FitZone.Body" android:textColor="@color/colorWhite" android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
     </ScrollView>
 </LinearLayout>

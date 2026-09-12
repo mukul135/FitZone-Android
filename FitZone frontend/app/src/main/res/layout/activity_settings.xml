@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/colorBackground">
+    android:background="@color/colorBackground"
+    android:fitsSystemWindows="true">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -15,17 +16,30 @@
         app:title="@string/profile_settings"
         app:titleTextColor="@color/colorTextPrimary" />
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:padding="@dimen/spacing_md">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.FitZone.Card"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/settings_placeholder"
-            android:textAppearance="@style/TextAppearance.FitZone.BodySecondary"
-            android:gravity="center" />
-    </LinearLayout>
+            android:layout_margin="@dimen/spacing_md">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="@dimen/spacing_xl">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_placeholder"
+                    android:textColor="@color/colorWhite"
+                    android:textAppearance="@style/TextAppearance.FitZone.BodySecondary"
+                    android:gravity="center" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </ScrollView>
 </LinearLayout>

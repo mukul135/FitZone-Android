@@ -3,27 +3,29 @@
     <!-- Base -->
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#000000</color>
+    <color name="colorTransparent">#00000000</color>
 
     <!-- Backgrounds -->
-    <color name="colorBackground">#0D0710</color>
-    <color name="colorSurface">#1A1120</color>
-    <color name="colorSurfaceVariant">#241830</color>
-    <color name="colorInputBackground">#1F1526</color>
+    <color name="colorBackground">#090C09</color> <!-- Very dark green-black -->
+    <color name="colorSurface">#151815</color> <!-- Slightly lighter dark green-black for cards -->
+    <color name="colorSurfaceVariant">#1E211E</color> <!-- Even lighter for nested elements -->
+    <color name="colorInputBackground">#1A1D1A</color> <!-- Input fields background -->
 
-    <!-- Purple / violet accent family (from original style.css + Figma) -->
-    <color name="colorPrimary">#8000FF</color>
-    <color name="colorPrimaryVariant">#6A00FF</color>
-    <color name="colorAccentLight">#B84DFF</color>
-    <color name="colorAccentLighter">#D580FF</color>
-    <color name="colorAccentMuted">#C266FF</color>
+    <!-- Lime accent family -->
+    <color name="colorPrimary">#C4ED33</color> <!-- Bright Lime / Neon Green -->
+    <color name="colorPrimaryVariant">#A8D519</color>
+    <color name="colorAccentLight">#D2F56B</color>
+    <color name="colorAccentLighter">#E1FA99</color>
+    <color name="colorAccentMuted">#7A941F</color>
 
     <!-- Text -->
     <color name="colorTextPrimary">#FFFFFF</color>
-    <color name="colorTextSecondary">#C9BFD4</color>
-    <color name="colorTextMuted">#8B8094</color>
+    <color name="colorTextSecondary">#A1A8A4</color>
+    <color name="colorTextMuted">#737A76</color>
+    <color name="colorTextOnPrimary">#000000</color>
 
     <!-- Borders -->
-    <color name="colorBorder">#332740</color>
+    <color name="colorBorder">#2A2E2A</color>
 
     <!-- Status -->
     <color name="colorSuccess">#3DDC84</color>

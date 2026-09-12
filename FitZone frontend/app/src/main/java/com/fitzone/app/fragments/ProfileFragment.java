@@ -39,8 +39,7 @@ public class ProfileFragment extends Fragment {
     private LinearLayout errorGroup;
     private Button btnRetry;
 
-    private TextView tvAvatarInitials, tvName, tvEmail, tvBmiValue;
-    private Chip chipGoal;
+    private TextView tvName, tvEmail;
 
     private MemberProfile currentProfile;
 
@@ -55,24 +54,23 @@ public class ProfileFragment extends Fragment {
         errorGroup = view.findViewById(R.id.errorGroup);
         btnRetry = view.findViewById(R.id.btnRetry);
 
-        tvAvatarInitials = view.findViewById(R.id.tvAvatarInitials);
         tvName = view.findViewById(R.id.tvName);
         tvEmail = view.findViewById(R.id.tvEmail);
-        chipGoal = view.findViewById(R.id.chipGoal);
-        tvBmiValue = view.findViewById(R.id.tvBmiValue);
 
         btnRetry.setOnClickListener(v -> loadProfile());
 
-        view.findViewById(R.id.rowPersonalInfo).setOnClickListener(v -> openPersonalInfo());
-        view.findViewById(R.id.rowFitnessInfo).setOnClickListener(v -> openFitnessInfo());
-        view.findViewById(R.id.rowMembership).setOnClickListener(v -> goToMembership());
-        view.findViewById(R.id.rowSettings).setOnClickListener(v ->
+        view.findViewById(R.id.cardPersonalInfo).setOnClickListener(v -> openPersonalInfo());
+        view.findViewById(R.id.cardFitnessInfo).setOnClickListener(v -> openFitnessInfo());
+        view.findViewById(R.id.cardMembership).setOnClickListener(v -> goToMembership());
+        view.findViewById(R.id.cardSettings).setOnClickListener(v ->
                 startActivity(new Intent(getActivity(), SettingsActivity.class)));
-        view.findViewById(R.id.rowHelpSupport).setOnClickListener(v ->
+        view.findViewById(R.id.cardHelpSupport).setOnClickListener(v ->
                 startActivity(new Intent(getActivity(), HelpSupportActivity.class)));
-        view.findViewById(R.id.rowMore).setOnClickListener(v ->
+        view.findViewById(R.id.cardMore).setOnClickListener(v ->
                 startActivity(new Intent(getActivity(), com.fitzone.app.activities.MoreMenuActivity.class)));
-        view.findViewById(R.id.rowLogout).setOnClickListener(v -> {
+        view.findViewById(R.id.btnSendMessage).setOnClickListener(v ->
+                startActivity(new Intent(getActivity(), HelpSupportActivity.class)));
+        view.findViewById(R.id.btnLogout).setOnClickListener(v -> {
             if (getActivity() instanceof MainActivity) {
                 ((MainActivity) getActivity()).logout();
             }
@@ -122,17 +120,6 @@ public class ProfileFragment extends Fragment {
         String fullname = safe(profile.getFullname());
         tvName.setText(fullname);
         tvEmail.setText(safe(profile.getEmail()));
-        tvAvatarInitials.setText(getInitials(fullname));
-
-        String goal = profile.getGoal();
-        if (goal != null && !goal.trim().isEmpty()) {
-            chipGoal.setVisibility(View.VISIBLE);
-            chipGoal.setText(goal);
-        } else {
-            chipGoal.setVisibility(View.GONE);
-        }
-
-        tvBmiValue.setText(calculateBmiDisplay(profile.getHeight(), profile.getWeight()));
     }
 
     // Same formula used on Home: weight / (height_m^2), height provided in cm.

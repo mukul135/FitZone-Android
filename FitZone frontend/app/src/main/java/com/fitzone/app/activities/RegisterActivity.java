@@ -68,6 +68,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private CheckBox checkboxTerms;
     private Button registerButton;
+    private TextView textLoginLink;
     private ProgressBar loadingSpinner;
 
     private String programName; // null if this is a plain (non-program) registration
@@ -86,6 +87,9 @@ public class RegisterActivity extends AppCompatActivity {
         setupProgramBanner();
 
         registerButton.setOnClickListener(v -> attemptRegister());
+        if (textLoginLink != null) {
+            textLoginLink.setOnClickListener(v -> finish());
+        }
     }
 
     private void bindViews() {
@@ -125,6 +129,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         checkboxTerms = findViewById(R.id.checkboxTerms);
         registerButton = findViewById(R.id.buttonRegister);
+        textLoginLink = findViewById(R.id.textLoginLink);
         loadingSpinner = findViewById(R.id.progressRegister);
     }
 

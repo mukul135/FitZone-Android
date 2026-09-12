@@ -9,7 +9,14 @@
         <item name="colorSurface">@color/colorSurface</item>
         <item name="colorOnBackground">@color/colorTextPrimary</item>
         <item name="colorOnSurface">@color/colorTextPrimary</item>
-        <item name="colorOnPrimary">@color/colorWhite</item>
+        <item name="colorOnPrimary">@color/colorTextOnPrimary</item>
+        
+        <!-- Fix text colors in inputs and dropdowns -->
+        <item name="android:textColorPrimary">@color/colorTextPrimary</item>
+        <item name="android:textColorSecondary">@color/colorTextSecondary</item>
+        <item name="android:editTextColor">@color/colorTextPrimary</item>
+        <item name="colorControlNormal">@color/colorTextSecondary</item>
+        
         <item name="android:statusBarColor">@color/colorBackground</item>
         <item name="android:windowLightStatusBar" tools:targetApi="23">false</item>
         <item name="materialButtonStyle">@style/Widget.FitZone.Button.Primary</item>
