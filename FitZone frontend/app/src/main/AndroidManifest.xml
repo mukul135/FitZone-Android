@@ -51,6 +51,11 @@
         <activity android:name=".activities.ContactActivity" android:exported="false" />
         <activity android:name=".activities.MoreMenuActivity" android:exported="false" />
 
+        <activity
+            android:name=".activities.ChangePasswordActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FitZone" />
+
     </application>
 
 </manifest>

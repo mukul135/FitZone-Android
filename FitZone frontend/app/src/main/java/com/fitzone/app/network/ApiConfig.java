@@ -24,7 +24,7 @@ public class ApiConfig {
     // Your computer's actual LAN IP. This CAN change (new Wi-Fi, router
     // restart) — if a physical-device test ever times out the same way the
     // emulator did, re-check this value with `ipconfig`.
-    public static final String BASE_URL_LOCAL_NETWORK = "http://192.168.1.101:5000/";
+    public static final String BASE_URL_LOCAL_NETWORK = "http://192.168.1.103:5000/";
 
     // ---- Production (once you deploy Flask somewhere real) ----
     // Leave this as a placeholder until you actually deploy. Do NOT put
@@ -35,5 +35,5 @@ public class ApiConfig {
     // ACTIVE URL — this is the one line the rest of the app uses.
     // Switch this constant while developing; nothing else needs to change.
     // ===========================================================
-    public static final String BASE_URL = BASE_URL_EMULATOR;
+    public static final String BASE_URL = BASE_URL_LOCAL_NETWORK;
 }

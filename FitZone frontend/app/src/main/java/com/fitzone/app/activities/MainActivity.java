@@ -79,6 +79,11 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setSelectedItemId(R.id.nav_membership);
     }
 
+    // Called by HomeFragment's profile avatar.
+    public void navigateToProfileTab() {
+        bottomNavigationView.setSelectedItemId(R.id.nav_profile);
+    }
+
     // Called by ProfileFragment's Logout button, and by HomeFragment on a
     // 401 from /api/profile (expired/invalid token).
     public void logout() {

@@ -18,28 +18,210 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/spacing_xl">
 
-        <com.google.android.material.card.MaterialCardView
-            style="@style/Widget.FitZone.Card"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/spacing_md">
+            android:orientation="vertical"
+            android:padding="@dimen/spacing_md">
 
-            <LinearLayout
+            <!-- Notifications Section -->
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="@dimen/spacing_xl">
+                android:text="@string/settings_notifications_title"
+                android:textAppearance="@style/TextAppearance.FitZone.Heading2"
+                android:textColor="@color/colorPrimary"
+                android:layout_marginBottom="@dimen/spacing_sm"
+                android:layout_marginStart="@dimen/spacing_sm" />
 
-                <TextView
-                    android:layout_width="wrap_content"
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.FitZone.Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_lg">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/settings_placeholder"
-                    android:textColor="@color/colorWhite"
-                    android:textAppearance="@style/TextAppearance.FitZone.BodySecondary"
-                    android:gravity="center" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_md">
+
+                    <!-- Push Notifications Toggle -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/settings_push_notif"
+                                android:textAppearance="@style/TextAppearance.FitZone.Body"
+                                android:textColor="@color/colorTextPrimary" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/settings_push_notif_desc"
+                                android:textAppearance="@style/TextAppearance.FitZone.BodySecondary"
+                                android:textColor="@color/colorTextSecondary"
+                                android:layout_marginTop="4dp" />
+                        </LinearLayout>
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/switchPushNotif"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            app:useMaterialThemeColors="true" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/colorSurfaceVariant"
+                        android:layout_marginTop="@dimen/spacing_md"
+                        android:layout_marginBottom="@dimen/spacing_md" />
+
+                    <!-- Email Newsletter Toggle -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/settings_email_notif"
+                                android:textAppearance="@style/TextAppearance.FitZone.Body"
+                                android:textColor="@color/colorTextPrimary" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/settings_email_notif_desc"
+                                android:textAppearance="@style/TextAppearance.FitZone.BodySecondary"
+                                android:textColor="@color/colorTextSecondary"
+                                android:layout_marginTop="4dp" />
+                        </LinearLayout>
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/switchEmailNotif"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="false"
+                            app:useMaterialThemeColors="true" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+
+
+            <!-- Account Section -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_account_title"
+                android:textAppearance="@style/TextAppearance.FitZone.Heading2"
+                android:textColor="@color/colorPrimary"
+                android:layout_marginBottom="@dimen/spacing_sm"
+                android:layout_marginStart="@dimen/spacing_sm" />
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.FitZone.Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_md">
+
+                    <!-- Change Password -->
+                    <LinearLayout
+                        android:id="@+id/btnChangePassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center_vertical"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp">
+                        
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_lock"
+                            app:tint="@color/colorTextPrimary"
+                            android:layout_marginEnd="@dimen/spacing_md" />
+                            
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/settings_change_password"
+                            android:textAppearance="@style/TextAppearance.FitZone.Body"
+                            android:textColor="@color/colorTextPrimary" />
+                            
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_chevron_right"
+                            app:tint="@color/colorTextSecondary" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/colorSurfaceVariant"
+                        android:layout_marginTop="@dimen/spacing_md"
+                        android:layout_marginBottom="@dimen/spacing_md" />
+
+                    <!-- Delete Account -->
+                    <LinearLayout
+                        android:id="@+id/btnDeleteAccount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center_vertical"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp">
+                        
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_trash"
+                            app:tint="@color/colorError"
+                            android:layout_marginEnd="@dimen/spacing_md" />
+                            
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/settings_delete_account"
+                            android:textAppearance="@style/TextAppearance.FitZone.Body"
+                            android:textColor="@color/colorError" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
     </ScrollView>
 </LinearLayout>

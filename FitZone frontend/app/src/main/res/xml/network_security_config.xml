@@ -21,6 +21,6 @@
 
         <!-- Your computer's LAN IP, for testing on a real physical phone
              later (Phase 7 rule #33) — matches ApiConfig.BASE_URL_LOCAL_NETWORK -->
-        <domain includeSubdomains="false">192.168.1.101</domain>
+        <domain includeSubdomains="false">192.168.1.103</domain>
     </domain-config>
 </network-security-config>

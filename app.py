@@ -264,6 +264,34 @@ def api_login():
         return error_response("Unable to process login", "SERVER_ERROR", 500)
 
 # ===============================
+# API: CHANGE PASSWORD
+# ===============================
+@app.route("/api/auth/change-password", methods=["POST"])
+@token_required
+def api_change_password(member_id):
+    if db is None:
+        return error_response("Database unavailable", "DB_UNAVAILABLE", 500)
+    data = request.get_json()
+    if not data or not data.get("current_password") or not data.get("new_password"):
+        return error_response("Current and new passwords are required", "VALIDATION_ERROR", 400)
+        
+    try:
+        # Check current password
+        cursor.execute("SELECT password FROM members WHERE id=%s", (member_id,))
+        user = cursor.fetchone()
+        if not user or not check_password_hash(user[0], data["current_password"]):
+            return error_response("Incorrect current password", "INVALID_CREDENTIALS", 401)
+            
+        # Update new password
+        hashed_password = generate_password_hash(data["new_password"])
+        cursor.execute("UPDATE members SET password=%s WHERE id=%s", (hashed_password, member_id))
+        db.commit()
+        
+        return success_response({"message": "Password updated successfully"})
+    except mysql.connector.Error as err:
+        return error_response(f"Database error: {err}", "DB_ERROR", 500)
+
+# ===============================
 # API: PROFILE (for Android)
 # ===============================
 # Protected route — requires a valid token from /api/auth/login.

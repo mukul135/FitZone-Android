@@ -20,5 +20,21 @@ public class SettingsActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         toolbar.setNavigationOnClickListener(v -> finish());
+        
+        findViewById(R.id.btnChangePassword).setOnClickListener(v -> 
+            startActivity(new android.content.Intent(this, ChangePasswordActivity.class))
+        );
+        
+        findViewById(R.id.btnDeleteAccount).setOnClickListener(v -> {
+            new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle(R.string.settings_delete_account)
+                .setMessage(R.string.settings_delete_account_confirm)
+                .setPositiveButton("Delete", (dialog, which) -> {
+                    android.widget.Toast.makeText(this, "Account deleted", android.widget.Toast.LENGTH_SHORT).show();
+                    // Handle actual deletion logic here
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
+        });
     }
 }

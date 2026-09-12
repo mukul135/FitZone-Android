@@ -33,12 +33,39 @@ import com.fitzone.app.utils.SessionManager;
 
 public class SplashActivity extends AppCompatActivity {
 
-    private static final int SPLASH_DELAY_MS = 800;
+    private static final int SPLASH_DELAY_MS = 2500;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        // Find views
+        android.view.View content = findViewById(R.id.splashContent);
+        android.view.View bottomText = findViewById(R.id.splashBottomText);
+
+        // Initial state for animation (start slightly lower)
+        content.setTranslationY(100f);
+        bottomText.setTranslationY(50f);
+
+        // Animate content (fade in and slide up)
+        content.animate()
+                .alpha(1f)
+                .translationY(0f)
+                .setDuration(1000)
+                .setStartDelay(300)
+                .setInterpolator(new android.view.animation.DecelerateInterpolator())
+                .start();
+
+        // Animate bottom text (fade in and slide up slightly later)
+        bottomText.animate()
+                .alpha(1f)
+                .translationY(0f)
+                .setDuration(1000)
+                .setStartDelay(800)
+                .setInterpolator(new android.view.animation.DecelerateInterpolator())
+                .start();
+
         new Handler(Looper.getMainLooper()).postDelayed(this::routeNextScreen, SPLASH_DELAY_MS);
     }
 

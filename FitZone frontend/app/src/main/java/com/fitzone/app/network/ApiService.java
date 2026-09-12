@@ -28,6 +28,8 @@ import com.fitzone.app.models.ProgramsResponse;
 import com.fitzone.app.models.MembershipResponse;
 import com.fitzone.app.models.PlansResponse;
 import com.fitzone.app.models.UpdateMembershipRequest;
+import com.fitzone.app.models.ChangePasswordRequest;
+import com.fitzone.app.models.BaseResponse;
 
 public interface ApiService {
 
@@ -65,6 +67,9 @@ public interface ApiService {
     Call<ProgramsResponse> getPrograms();
     @POST("api/membership/update")
     Call<MembershipResponse> updateMembership(@Body UpdateMembershipRequest request);
+
+    @POST("api/auth/change-password")
+    Call<BaseResponse> changePassword(@Body ChangePasswordRequest request);
 
     @POST("api/contact")
     Call<Map<String, Object>> submitContact(@Body Map<String, String> contactRequest);

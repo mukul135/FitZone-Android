@@ -64,6 +64,8 @@ public class ProfileFragment extends Fragment {
         view.findViewById(R.id.cardMembership).setOnClickListener(v -> goToMembership());
         view.findViewById(R.id.cardSettings).setOnClickListener(v ->
                 startActivity(new Intent(getActivity(), SettingsActivity.class)));
+        view.findViewById(R.id.btnSettings).setOnClickListener(v ->
+                startActivity(new Intent(getActivity(), SettingsActivity.class)));
         view.findViewById(R.id.cardHelpSupport).setOnClickListener(v ->
                 startActivity(new Intent(getActivity(), HelpSupportActivity.class)));
         view.findViewById(R.id.cardMore).setOnClickListener(v ->

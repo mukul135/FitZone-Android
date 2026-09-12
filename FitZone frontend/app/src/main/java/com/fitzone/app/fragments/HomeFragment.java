@@ -85,6 +85,12 @@ public class HomeFragment extends Fragment {
     }
 
     private void setupClickListeners() {
+        ivAvatar.setOnClickListener(v -> {
+            if (getActivity() instanceof MainActivity) {
+                ((MainActivity) getActivity()).navigateToProfileTab();
+            }
+        });
+
         btnViewMembership.setOnClickListener(v -> {
             if (getActivity() instanceof MainActivity) {
                 ((MainActivity) getActivity()).navigateToMembershipTab();
