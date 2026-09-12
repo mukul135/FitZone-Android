@@ -76,6 +76,15 @@ public class HomeFragment extends Fragment {
 
         cardBmi = view.findViewById(R.id.cardBmi);
         cardCalories = view.findViewById(R.id.cardCalories);
+        MaterialCardView cardDietPlan = view.findViewById(R.id.cardDietPlan);
+        MaterialCardView cardWorkoutSchedule = view.findViewById(R.id.cardWorkoutSchedule);
+
+        if (cardDietPlan != null) {
+            cardDietPlan.setOnClickListener(v -> Toast.makeText(requireContext(), "Diet Plan coming soon!", Toast.LENGTH_SHORT).show());
+        }
+        if (cardWorkoutSchedule != null) {
+            cardWorkoutSchedule.setOnClickListener(v -> Toast.makeText(requireContext(), "Workout Schedule coming soon!", Toast.LENGTH_SHORT).show());
+        }
 
         tvSeeAll = view.findViewById(R.id.tvSeeAll);
         rvPrograms = view.findViewById(R.id.rvPrograms);

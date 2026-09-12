@@ -116,11 +116,19 @@ public class LoginActivity extends AppCompatActivity {
                 if (response.isSuccessful() && body != null && body.isSuccess()
                         && body.getData() != null) {
                     handleLoginSuccess(body.getData());
-                } else if (body != null && body.getMessage() != null) {
-                    // Backend responded with a proper JSON error, e.g.
-                    // "Invalid email or password" (INVALID_CREDENTIALS).
-                    showError(body.getMessage());
                 } else {
+                    try {
+                        if (response.errorBody() != null) {
+                            String errorString = response.errorBody().string();
+                            org.json.JSONObject errorJson = new org.json.JSONObject(errorString);
+                            if (errorJson.has("message")) {
+                                showError(errorJson.getString("message"));
+                                return;
+                            }
+                        }
+                    } catch (Exception e) {
+                        Log.e("LOGIN_DEBUG", "Error parsing error body", e);
+                    }
                     showError("Login failed. Please try again.");
                 }
             }

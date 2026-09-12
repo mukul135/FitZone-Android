@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Patterns;
+import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -366,14 +367,19 @@ public class RegisterActivity extends AppCompatActivity {
                     // after registration, do not auto-login (Phase 7 rule #19).
                     startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
                     finish();
-                } else if (body != null && "DUPLICATE_EMAIL".equals(body.getError())) {
-                    layoutEmail.setError("An account with this email already exists");
-                    Toast.makeText(RegisterActivity.this,
-                            "An account with this email already exists. Please log in instead.",
-                            Toast.LENGTH_LONG).show();
-                } else if (body != null && body.getMessage() != null) {
-                    Toast.makeText(RegisterActivity.this, body.getMessage(), Toast.LENGTH_LONG).show();
                 } else {
+                    try {
+                        if (response.errorBody() != null) {
+                            String errorString = response.errorBody().string();
+                            org.json.JSONObject errorJson = new org.json.JSONObject(errorString);
+                            if (errorJson.has("message")) {
+                                Toast.makeText(RegisterActivity.this, errorJson.getString("message"), Toast.LENGTH_LONG).show();
+                                return;
+                            }
+                        }
+                    } catch (Exception e) {
+                        Log.e("REGISTER_DEBUG", "Error parsing error body", e);
+                    }
                     Toast.makeText(RegisterActivity.this,
                             "Registration failed. Please try again.", Toast.LENGTH_LONG).show();
                 }

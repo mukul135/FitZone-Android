@@ -211,7 +211,8 @@ def api_register():
 
         return success_response(message="Registration successful", status_code=201)
 
-    except Exception:
+    except Exception as e:
+        print(f"Registration Error: {e}")
         return error_response("Unable to complete registration", "SERVER_ERROR", 500)
 
 
@@ -260,7 +261,8 @@ def api_login():
             message="Login successful"
         )
 
-    except Exception:
+    except Exception as e:
+        print(f"Login Error: {e}")
         return error_response("Unable to process login", "SERVER_ERROR", 500)
 
 # ===============================
@@ -544,14 +546,14 @@ def api_register_program(program_name):
         sql = """
         INSERT INTO members
         (fullname, email, mobile, password, dob, gender, height, weight, goal, plan,
-         medical_info, emergency_name, emergency_number, program_interest)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+         medical_info, emergency_name, emergency_number, program_interest, profile_image)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
         values = (
             data["fullname"], data["email"], data["mobile"], hashed_password,
             data["dob"], data["gender"], data["height"], data["weight"],
             data["goal"], data["plan"], data["medical_info"],
-            data["emergency_name"], data["emergency_number"], program_name
+            data["emergency_name"], data["emergency_number"], program_name, data.get("profile_image")
         )
         cursor.execute(sql, values)
         db.commit()

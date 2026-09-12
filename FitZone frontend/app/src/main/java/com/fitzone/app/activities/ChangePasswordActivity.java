@@ -78,7 +78,18 @@ public class ChangePasswordActivity extends AppCompatActivity {
                     Toast.makeText(ChangePasswordActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     finish();
                 } else {
-                    // Try to extract error message if possible, or show generic
+                    try {
+                        if (response.errorBody() != null) {
+                            String errorString = response.errorBody().string();
+                            org.json.JSONObject errorJson = new org.json.JSONObject(errorString);
+                            if (errorJson.has("message")) {
+                                Toast.makeText(ChangePasswordActivity.this, errorJson.getString("message"), Toast.LENGTH_LONG).show();
+                                return;
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     Toast.makeText(ChangePasswordActivity.this, "Failed to change password. Please check current password.", Toast.LENGTH_LONG).show();
                 }
             }
