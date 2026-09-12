@@ -1,10 +1,14 @@
 package com.fitzone.app.fragments;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,8 +40,9 @@ import android.content.Intent;
 
 public class HomeFragment extends Fragment {
 
-    private TextView tvGreeting, tvGoal, ivAvatar, tvPlan, tvWeight, tvBmi,
+    private TextView tvGreeting, tvGoal, tvPlan, tvWeight, tvBmi,
             tvFitnessGoal, tvSeeAll, tvErrorMessage;
+    private ImageView ivAvatar;
     private MaterialCardView cardBmi, cardCalories;
     private Button btnViewMembership, btnRetry;
     private ProgressBar progressBarHome;
@@ -162,7 +167,24 @@ public class HomeFragment extends Fragment {
         tvGoal.setText(goal);
         tvFitnessGoal.setText(goal);
 
-        ivAvatar.setText(getInitials(fullname));
+        String profileImageBase64 = member.getProfileImage();
+        if (profileImageBase64 != null && profileImageBase64.startsWith("data:image")) {
+            try {
+                String cleanBase64 = profileImageBase64.substring(profileImageBase64.indexOf(",") + 1);
+                byte[] decodedBytes = Base64.decode(cleanBase64, Base64.DEFAULT);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+                if (bitmap != null) {
+                    ivAvatar.setImageBitmap(bitmap);
+                } else {
+                    ivAvatar.setImageResource(R.drawable.ic_profile);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                ivAvatar.setImageResource(R.drawable.ic_profile);
+            }
+        } else {
+            ivAvatar.setImageResource(R.drawable.ic_profile);
+        }
 
         String plan = (member.getPlan() != null && !member.getPlan().isEmpty())
                 ? member.getPlan() : "Not set";

@@ -59,20 +59,14 @@
                 android:layout_marginTop="@dimen/spacing_md"
                 android:layout_marginBottom="@dimen/spacing_lg">
 
-                <!-- Avatar with Lime Background and Dark Icon -->
-                <FrameLayout
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/ivProfileImage"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
+                    android:scaleType="centerCrop"
+                    app:shapeAppearanceOverlay="@style/CircleImageView"
                     android:background="@drawable/bg_avatar_circle"
-                    android:backgroundTint="@color/colorPrimary">
-
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_profile"
-                        app:tint="@color/colorBackground" />
-                </FrameLayout>
+                    android:src="@drawable/ic_profile" />
 
                 <TextView
                     android:id="@+id/tvName"

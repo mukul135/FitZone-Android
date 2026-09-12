@@ -55,13 +55,40 @@
             android:layout_marginBottom="@dimen/spacing_md"
             tools:ignore="MissingConstraints" />
 
-        <!-- ==================== PERSONAL DETAILS ==================== -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Personal Details"
             android:textAppearance="@style/TextAppearance.FitZone.Heading2"
             android:layout_marginBottom="@dimen/spacing_sm" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginBottom="@dimen/spacing_md">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imgProfilePreview"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:scaleType="centerCrop"
+                app:shapeAppearanceOverlay="@style/CircleImageView"
+                android:src="@drawable/ic_profile"
+                android:background="@drawable/bg_circle_placeholder"
+                android:layout_marginBottom="8dp"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnPickImage"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Select Profile Picture"
+                android:textColor="@color/colorPrimary"
+                app:icon="@android:drawable/ic_menu_camera"
+                app:iconTint="@color/colorPrimary"/>
+        </LinearLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutFullName" style="@style/Widget.FitZone.TextInputLayout"

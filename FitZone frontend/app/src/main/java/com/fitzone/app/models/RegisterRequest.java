@@ -41,10 +41,13 @@ public class RegisterRequest {
     @SerializedName("emergency_number")
     private String emergencyNumber;
 
+    @SerializedName("profile_image")
+    private String profileImage;
+
     public RegisterRequest(String fullname, String email, String mobile, String password,
                            String confirmPassword, String dob, String gender, String height,
                            String weight, String goal, String plan, String medicalInfo,
-                           String emergencyName, String emergencyNumber) {
+                           String emergencyName, String emergencyNumber, String profileImage) {
         this.fullname = fullname;
         this.email = email;
         this.mobile = mobile;
@@ -59,5 +62,6 @@ public class RegisterRequest {
         this.medicalInfo = medicalInfo;
         this.emergencyName = emergencyName;
         this.emergencyNumber = emergencyNumber;
+        this.profileImage = profileImage;
     }
 }

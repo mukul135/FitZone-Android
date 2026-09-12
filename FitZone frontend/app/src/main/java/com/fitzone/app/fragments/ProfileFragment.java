@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -40,6 +43,7 @@ public class ProfileFragment extends Fragment {
     private Button btnRetry;
 
     private TextView tvName, tvEmail;
+    private ImageView ivProfileImage;
 
     private MemberProfile currentProfile;
 
@@ -56,6 +60,7 @@ public class ProfileFragment extends Fragment {
 
         tvName = view.findViewById(R.id.tvName);
         tvEmail = view.findViewById(R.id.tvEmail);
+        ivProfileImage = view.findViewById(R.id.ivProfileImage);
 
         btnRetry.setOnClickListener(v -> loadProfile());
 
@@ -122,6 +127,25 @@ public class ProfileFragment extends Fragment {
         String fullname = safe(profile.getFullname());
         tvName.setText(fullname);
         tvEmail.setText(safe(profile.getEmail()));
+
+        String profileImageBase64 = profile.getProfileImage();
+        if (profileImageBase64 != null && profileImageBase64.startsWith("data:image")) {
+            try {
+                String cleanBase64 = profileImageBase64.substring(profileImageBase64.indexOf(",") + 1);
+                byte[] decodedBytes = Base64.decode(cleanBase64, Base64.DEFAULT);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+                if (bitmap != null) {
+                    ivProfileImage.setImageBitmap(bitmap);
+                } else {
+                    ivProfileImage.setImageResource(R.drawable.ic_profile);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                ivProfileImage.setImageResource(R.drawable.ic_profile);
+            }
+        } else {
+            ivProfileImage.setImageResource(R.drawable.ic_profile);
+        }
     }
 
     // Same formula used on Home: weight / (height_m^2), height provided in cm.

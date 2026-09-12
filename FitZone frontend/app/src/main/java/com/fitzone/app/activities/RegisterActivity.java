@@ -16,6 +16,16 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.util.Base64;
+import android.widget.ImageView;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+
 import com.fitzone.app.R;
 import com.fitzone.app.models.RegisterRequest;
 import com.fitzone.app.models.RegisterResponse;
@@ -74,6 +84,17 @@ public class RegisterActivity extends AppCompatActivity {
     private String programName; // null if this is a plain (non-program) registration
     private boolean isLoading = false;
 
+    private ImageView imgProfilePreview;
+    private Button btnPickImage;
+    private String base64Image = null;
+
+    private final ActivityResultLauncher<String> imagePickerLauncher =
+            registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
+                if (uri != null) {
+                    processSelectedImage(uri);
+                }
+            });
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,10 +111,19 @@ public class RegisterActivity extends AppCompatActivity {
         if (textLoginLink != null) {
             textLoginLink.setOnClickListener(v -> finish());
         }
+
+        if (btnPickImage != null) {
+            btnPickImage.setOnClickListener(v -> {
+                imagePickerLauncher.launch("image/*");
+            });
+        }
     }
 
     private void bindViews() {
         programBanner = findViewById(R.id.textProgramBanner);
+
+        imgProfilePreview = findViewById(R.id.imgProfilePreview);
+        btnPickImage = findViewById(R.id.btnPickImage);
 
         layoutFullName = findViewById(R.id.layoutFullName);
         layoutEmail = findViewById(R.id.layoutEmail);
@@ -137,6 +167,40 @@ public class RegisterActivity extends AppCompatActivity {
         android.widget.ArrayAdapter<CharSequence> adapter = android.widget.ArrayAdapter.createFromResource(
                 this, R.array.goal_options, android.R.layout.simple_list_item_1);
         dropdownGoal.setAdapter(adapter);
+    }
+
+    private void processSelectedImage(Uri uri) {
+        try {
+            InputStream imageStream = getContentResolver().openInputStream(uri);
+            Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+            
+            // Resize image to max 500x500 to save bandwidth and database space
+            int maxDim = 500;
+            int width = selectedImage.getWidth();
+            int height = selectedImage.getHeight();
+            float ratio = (float) width / height;
+            if (width > maxDim || height > maxDim) {
+                if (ratio > 1) {
+                    width = maxDim;
+                    height = (int) (width / ratio);
+                } else {
+                    height = maxDim;
+                    width = (int) (height * ratio);
+                }
+                selectedImage = Bitmap.createScaledBitmap(selectedImage, width, height, true);
+            }
+
+            imgProfilePreview.setImageBitmap(selectedImage);
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            selectedImage.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+            byte[] imageBytes = baos.toByteArray();
+            
+            base64Image = "data:image/jpeg;base64," + Base64.encodeToString(imageBytes, Base64.NO_WRAP);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Failed to load image", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void setupDobPicker() {
@@ -279,7 +343,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         RegisterRequest request = new RegisterRequest(
                 fullName, email, mobile, password, confirmPassword, dob, gender,
-                height, weight, goal, plan, medicalInfo, emergencyName, emergencyNumber
+                height, weight, goal, plan, medicalInfo, emergencyName, emergencyNumber, base64Image
         );
 
         setLoading(true);

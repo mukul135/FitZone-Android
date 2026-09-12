@@ -197,14 +197,14 @@ def api_register():
 
         sql = """
         INSERT INTO members
-        (fullname, email, mobile, password, dob, gender, height, weight, goal, plan, medical_info, emergency_name, emergency_number)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        (fullname, email, mobile, password, dob, gender, height, weight, goal, plan, medical_info, emergency_name, emergency_number, profile_image)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
         values = (
             data["fullname"], data["email"], data["mobile"], hashed_password,
             data["dob"], data["gender"], data["height"], data["weight"],
             data["goal"], data["plan"], data["medical_info"],
-            data["emergency_name"], data["emergency_number"]
+            data["emergency_name"], data["emergency_number"], data.get("profile_image")
         )
         cursor.execute(sql, values)
         db.commit()
@@ -308,7 +308,7 @@ def api_profile(member_id):
         cursor.execute(
             """
             SELECT id, fullname, email, mobile, dob, gender, height, weight,
-                   goal, plan, medical_info, emergency_name, emergency_number
+                   goal, plan, medical_info, emergency_name, emergency_number, profile_image
             FROM members WHERE id=%s
             """,
             (member_id,)
@@ -331,7 +331,8 @@ def api_profile(member_id):
             "plan": user[9],
             "medical_info": user[10],
             "emergency_name": user[11],
-            "emergency_number": user[12]
+            "emergency_number": user[12],
+            "profile_image": user[13]
         }
 
         return success_response(data=profile, message="Profile fetched successfully")

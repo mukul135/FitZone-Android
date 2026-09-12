@@ -43,15 +43,14 @@
                         android:textAppearance="@style/TextAppearance.FitZone.BodySecondary" />
                 </LinearLayout>
 
-                <TextView
+                <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/ivAvatar"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
+                    android:scaleType="centerCrop"
+                    app:shapeAppearanceOverlay="@style/CircleImageView"
                     android:background="@drawable/bg_avatar_circle"
-                    android:gravity="center"
-                    android:textColor="@color/colorTextOnPrimary"
-                    android:textStyle="bold"
-                    android:textSize="16sp" />
+                    android:src="@drawable/ic_profile" />
             </LinearLayout>
 
             <!-- Active Membership card -->

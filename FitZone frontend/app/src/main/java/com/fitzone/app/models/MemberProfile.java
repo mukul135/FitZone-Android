@@ -17,6 +17,7 @@ public class MemberProfile {
     private String medical_info;
     private String emergency_name;
     private String emergency_number;
+    private String profile_image;
 
     public int getId() { return id; }
     public String getFullname() { return fullname; }
@@ -31,4 +32,5 @@ public class MemberProfile {
     public String getMedicalInfo() { return medical_info; }
     public String getEmergencyName() { return emergency_name; }
     public String getEmergencyNumber() { return emergency_number; }
+    public String getProfileImage() { return profile_image; }
 }
