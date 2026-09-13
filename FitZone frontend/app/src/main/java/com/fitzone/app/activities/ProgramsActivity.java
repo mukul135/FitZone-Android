@@ -14,15 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.fitzone.app.R;
 import com.fitzone.app.adapters.ProgramFullAdapter;
 import com.fitzone.app.models.Program;
-import com.fitzone.app.models.ProgramsResponse;
-import com.fitzone.app.network.ApiService;
-import com.fitzone.app.network.RetrofitClient;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import android.widget.Button;
 
 // ===============================
@@ -67,29 +61,16 @@ public class ProgramsActivity extends AppCompatActivity {
     private void loadPrograms() {
         showLoading();
 
-        ApiService apiService = RetrofitClient.getApiService(getApplicationContext());
-        apiService.getPrograms().enqueue(new Callback<ProgramsResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<ProgramsResponse> call,
-                                   @NonNull Response<ProgramsResponse> response) {
-                if (response.isSuccessful() && response.body() != null
-                        && response.body().isSuccess() && response.body().getData() != null) {
-                    List<Program> programs = response.body().getData().getPrograms();
-                    if (programs == null || programs.isEmpty()) {
-                        showError(getString(R.string.error_no_programs));
-                    } else {
-                        showContent(programs);
-                    }
-                } else {
-                    showError(getString(R.string.error_load_programs));
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<ProgramsResponse> call, @NonNull Throwable t) {
-                showError("Network error. Please check your connection.");
-            }
-        });
+        List<Program> staticPrograms = new ArrayList<>();
+        staticPrograms.add(new Program("Weight-Training", "Weight Training", "Build muscle and increase strength with structured weight lifting programs.", null));
+        staticPrograms.add(new Program("Cardio-Training", "Cardio Training", "Improve stamina and heart health with treadmill, cycling, and HIIT workouts.", null));
+        staticPrograms.add(new Program("Yoga-Flexibility", "Yoga & Flexibility", "Enhance flexibility, reduce stress, and improve mental focus.", null));
+        staticPrograms.add(new Program("Personal-Training", "Personal Training", "One-on-one coaching tailored to your fitness goals.", null));
+        staticPrograms.add(new Program("Muscle-Gain-Program", "Muscle Gain Program", "12-week structured strength training program focused on hypertrophy.", null));
+        staticPrograms.add(new Program("Fat-Loss-Program", "Fat Loss Program", "8-week transformation plan combining HIIT, cardio, and diet guidance.", null));
+        staticPrograms.add(new Program("Endurance-Training", "Endurance Training", "10-week advanced conditioning program to improve stamina and performance.", null));
+        
+        showContent(staticPrograms);
     }
 
     private void showLoading() {

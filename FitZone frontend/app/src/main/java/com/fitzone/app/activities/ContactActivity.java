@@ -13,17 +13,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.fitzone.app.R;
-import com.fitzone.app.network.ApiService;
-import com.fitzone.app.network.RetrofitClient;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FieldValue;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class ContactActivity extends AppCompatActivity {
 
@@ -96,35 +92,26 @@ public class ContactActivity extends AppCompatActivity {
     private void submitContact(String name, String email, String phone, String message) {
         setSubmitting(true);
 
-        Map<String, String> body = new HashMap<>();
+        Map<String, Object> body = new HashMap<>();
         body.put("name", name);
         body.put("email", email);
         body.put("phone", phone);
         body.put("message", message);
+        body.put("timestamp", FieldValue.serverTimestamp());
 
-        ApiService api = RetrofitClient.getApiService(getApplicationContext());
-        api.submitContact(body).enqueue(new Callback<Map<String, Object>>() {
-            @Override
-            public void onResponse(@NonNull Call<Map<String, Object>> call,
-                                   @NonNull Response<Map<String, Object>> response) {
-                setSubmitting(false);
-                if (response.isSuccessful()) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("contact_messages").add(body)
+                .addOnSuccessListener(documentReference -> {
+                    setSubmitting(false);
                     Toast.makeText(ContactActivity.this,
                             R.string.contact_success, Toast.LENGTH_LONG).show();
                     clearForm();
-                } else {
+                })
+                .addOnFailureListener(e -> {
+                    setSubmitting(false);
                     Toast.makeText(ContactActivity.this,
                             R.string.contact_error_server, Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<Map<String, Object>> call, @NonNull Throwable t) {
-                setSubmitting(false);
-                Toast.makeText(ContactActivity.this,
-                        R.string.contact_error_network, Toast.LENGTH_LONG).show();
-            }
-        });
+                });
     }
 
     private void clearForm() {

@@ -25,15 +25,11 @@ import com.fitzone.app.activities.HelpSupportActivity;
 import com.fitzone.app.activities.MainActivity;
 import com.fitzone.app.activities.PersonalInfoActivity;
 import com.fitzone.app.activities.SettingsActivity;
-import com.fitzone.app.models.MemberProfile;
-import com.fitzone.app.models.ProfileResponse;
-import com.fitzone.app.network.ApiService;
-import com.fitzone.app.network.RetrofitClient;
 import com.google.android.material.chip.Chip;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class ProfileFragment extends Fragment {
 
@@ -45,7 +41,7 @@ public class ProfileFragment extends Fragment {
     private TextView tvName, tvEmail;
     private ImageView ivProfileImage;
 
-    private MemberProfile currentProfile;
+    private DocumentSnapshot currentProfileDoc;
 
     @Nullable
     @Override
@@ -91,44 +87,38 @@ public class ProfileFragment extends Fragment {
     private void loadProfile() {
         showLoading();
 
-        ApiService api = RetrofitClient.getApiService(requireContext().getApplicationContext());
-        api.getProfile().enqueue(new Callback<ProfileResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<ProfileResponse> call,
-                                   @NonNull Response<ProfileResponse> response) {
-                if (!isAdded()) return;
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            if (getActivity() instanceof MainActivity) {
+                ((MainActivity) getActivity()).logout();
+            }
+            return;
+        }
 
-                if (response.code() == 401) {
-                    if (getActivity() instanceof MainActivity) {
-                        ((MainActivity) getActivity()).logout();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("users").document(user.getUid()).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (!isAdded()) return;
+                    if (documentSnapshot.exists()) {
+                        currentProfileDoc = documentSnapshot;
+                        populateProfile(currentProfileDoc);
+                        showContent();
+                    } else {
+                        showError();
                     }
-                    return;
-                }
-
-                if (response.isSuccessful() && response.body() != null
-                        && response.body().isSuccess() && response.body().getData() != null) {
-                    currentProfile = response.body().getData();
-                    populateProfile(currentProfile);
-                    showContent();
-                } else {
+                })
+                .addOnFailureListener(e -> {
+                    if (!isAdded()) return;
                     showError();
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<ProfileResponse> call, @NonNull Throwable t) {
-                if (!isAdded()) return;
-                showError();
-            }
-        });
+                });
     }
 
-    private void populateProfile(MemberProfile profile) {
-        String fullname = safe(profile.getFullname());
+    private void populateProfile(DocumentSnapshot profile) {
+        String fullname = safe(profile.getString("fullname"));
         tvName.setText(fullname);
-        tvEmail.setText(safe(profile.getEmail()));
+        tvEmail.setText(safe(profile.getString("email")));
 
-        String profileImageBase64 = profile.getProfileImage();
+        String profileImageBase64 = profile.getString("profile_image");
         if (profileImageBase64 != null && profileImageBase64.startsWith("data:image")) {
             try {
                 String cleanBase64 = profileImageBase64.substring(profileImageBase64.indexOf(",") + 1);
@@ -176,23 +166,48 @@ public class ProfileFragment extends Fragment {
     }
 
     private void openPersonalInfo() {
-        if (currentProfile == null || getActivity() == null) return;
+        if (currentProfileDoc == null || getActivity() == null) return;
         Intent intent = new Intent(getActivity(), PersonalInfoActivity.class);
-        intent.putExtra("fullname", currentProfile.getFullname());
-        intent.putExtra("email", currentProfile.getEmail());
-        intent.putExtra("mobile", currentProfile.getMobile());
-        intent.putExtra("dob", currentProfile.getDob());
-        intent.putExtra("gender", currentProfile.getGender());
+        intent.putExtra("fullname", currentProfileDoc.getString("fullname"));
+        intent.putExtra("email", currentProfileDoc.getString("email"));
+        intent.putExtra("mobile", currentProfileDoc.getString("phone"));
+        intent.putExtra("dob", currentProfileDoc.getString("dob"));
+        intent.putExtra("gender", currentProfileDoc.getString("gender"));
         startActivity(intent);
     }
 
     private void openFitnessInfo() {
-        if (currentProfile == null || getActivity() == null) return;
+        if (currentProfileDoc == null || getActivity() == null) return;
         Intent intent = new Intent(getActivity(), FitnessInfoActivity.class);
-        intent.putExtra("height", currentProfile.getHeight());
-        intent.putExtra("weight", currentProfile.getWeight());
-        intent.putExtra("goal", currentProfile.getGoal());
-        intent.putExtra("medical_info", currentProfile.getMedicalInfo());
+        
+        Object heightObj = currentProfileDoc.get("height");
+        double height = 0.0;
+        if (heightObj instanceof Number) {
+            height = ((Number) heightObj).doubleValue();
+        } else if (heightObj instanceof String) {
+            try {
+                height = Double.parseDouble((String) heightObj);
+            } catch (NumberFormatException e) {
+                height = 0.0;
+            }
+        }
+        intent.putExtra("height", height);
+        
+        Object weightObj = currentProfileDoc.get("weight");
+        double weight = 0.0;
+        if (weightObj instanceof Number) {
+            weight = ((Number) weightObj).doubleValue();
+        } else if (weightObj instanceof String) {
+            try {
+                weight = Double.parseDouble((String) weightObj);
+            } catch (NumberFormatException e) {
+                weight = 0.0;
+            }
+        }
+        intent.putExtra("weight", weight);
+        
+        intent.putExtra("goal", currentProfileDoc.getString("goal"));
+        intent.putExtra("medical_info", currentProfileDoc.getString("medicalInfo"));
         startActivity(intent);
     }
 

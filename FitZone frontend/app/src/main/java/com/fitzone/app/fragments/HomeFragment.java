@@ -22,20 +22,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.fitzone.app.R;
 import com.fitzone.app.activities.MainActivity;
 import com.fitzone.app.adapters.ProgramAdapter;
-import com.fitzone.app.models.MemberProfile;
-import com.fitzone.app.models.ProfileResponse;
 import com.fitzone.app.models.Program;
-import com.fitzone.app.models.ProgramsResponse;
-import com.fitzone.app.network.ApiService;
-import com.fitzone.app.network.RetrofitClient;
 import com.google.android.material.card.MaterialCardView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import android.content.Intent;
 
 public class HomeFragment extends Fragment {
@@ -43,7 +40,7 @@ public class HomeFragment extends Fragment {
     private TextView tvGreeting, tvGoal, tvPlan, tvWeight, tvBmi,
             tvFitnessGoal, tvSeeAll, tvErrorMessage;
     private ImageView ivAvatar;
-    private MaterialCardView cardBmi, cardCalories;
+    private MaterialCardView cardBmi, cardCalories, cardDietPlan, cardWorkoutSchedule;
     private Button btnViewMembership, btnRetry;
     private ProgressBar progressBarHome;
     private View layoutError, scrollContent;
@@ -76,15 +73,8 @@ public class HomeFragment extends Fragment {
 
         cardBmi = view.findViewById(R.id.cardBmi);
         cardCalories = view.findViewById(R.id.cardCalories);
-        MaterialCardView cardDietPlan = view.findViewById(R.id.cardDietPlan);
-        MaterialCardView cardWorkoutSchedule = view.findViewById(R.id.cardWorkoutSchedule);
-
-        if (cardDietPlan != null) {
-            cardDietPlan.setOnClickListener(v -> Toast.makeText(requireContext(), "Diet Plan coming soon!", Toast.LENGTH_SHORT).show());
-        }
-        if (cardWorkoutSchedule != null) {
-            cardWorkoutSchedule.setOnClickListener(v -> Toast.makeText(requireContext(), "Workout Schedule coming soon!", Toast.LENGTH_SHORT).show());
-        }
+        cardDietPlan = view.findViewById(R.id.cardDietPlan);
+        cardWorkoutSchedule = view.findViewById(R.id.cardWorkoutSchedule);
 
         tvSeeAll = view.findViewById(R.id.tvSeeAll);
         rvPrograms = view.findViewById(R.id.rvPrograms);
@@ -125,6 +115,24 @@ public class HomeFragment extends Fragment {
                     .commit();
         });
 
+        if (cardDietPlan != null) {
+            cardDietPlan.setOnClickListener(v -> {
+                requireActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragmentContainer, new DietPlannerFragment())
+                        .addToBackStack(null)
+                        .commit();
+            });
+        }
+
+        if (cardWorkoutSchedule != null) {
+            cardWorkoutSchedule.setOnClickListener(v -> {
+                requireActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragmentContainer, new AiWorkoutPlannerFragment())
+                        .addToBackStack(null)
+                        .commit();
+            });
+        }
+
         tvSeeAll.setOnClickListener(v -> startActivity(
                 new Intent(requireContext(), com.fitzone.app.activities.ProgramsActivity.class)));
 
@@ -134,49 +142,44 @@ public class HomeFragment extends Fragment {
     private void loadProfile() {
         showLoading();
 
-        ApiService apiService = RetrofitClient.getApiService(requireContext().getApplicationContext());
-        apiService.getProfile().enqueue(new Callback<ProfileResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<ProfileResponse> call,
-                                   @NonNull Response<ProfileResponse> response) {
-                if (!isAdded()) return;
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            if (getActivity() instanceof MainActivity) {
+                ((MainActivity) getActivity()).logout();
+            }
+            return;
+        }
 
-                if (response.code() == 401) {
-                    // Token invalid/expired — same session-guard behavior as Phase 7.
-                    if (getActivity() instanceof MainActivity) {
-                        ((MainActivity) getActivity()).logout();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("users").document(user.getUid()).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (!isAdded()) return;
+                    if (documentSnapshot.exists()) {
+                        displayProfile(documentSnapshot);
+                        loadPrograms();
+                    } else {
+                        showError(getString(R.string.error_load_profile));
                     }
-                    return;
-                }
-
-                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
-                    displayProfile(response.body().getData());
-                    loadPrograms();
-                } else {
-                    showError(getString(R.string.error_load_profile));
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<ProfileResponse> call, @NonNull Throwable t) {
-                if (!isAdded()) return;
-                showError("Network error. Please check your connection.");
-            }
-        });
+                })
+                .addOnFailureListener(e -> {
+                    if (!isAdded()) return;
+                    showError("Network error. Please check your connection.");
+                });
     }
 
-    private void displayProfile(MemberProfile member) {
+    private void displayProfile(DocumentSnapshot member) {
         showContent();
 
-        String fullname = (member.getFullname() != null) ? member.getFullname() : "Member";
+        String fullname = member.getString("fullname");
+        if (fullname == null || fullname.isEmpty()) fullname = "Member";
         tvGreeting.setText(getString(R.string.home_greeting, fullname));
 
-        String goal = (member.getGoal() != null && !member.getGoal().isEmpty())
-                ? member.getGoal() : "Not set";
+        String goal = member.getString("goal");
+        if (goal == null || goal.isEmpty()) goal = "Not set";
         tvGoal.setText(goal);
         tvFitnessGoal.setText(goal);
 
-        String profileImageBase64 = member.getProfileImage();
+        String profileImageBase64 = member.getString("profile_image");
         if (profileImageBase64 != null && profileImageBase64.startsWith("data:image")) {
             try {
                 String cleanBase64 = profileImageBase64.substring(profileImageBase64.indexOf(",") + 1);
@@ -195,12 +198,33 @@ public class HomeFragment extends Fragment {
             ivAvatar.setImageResource(R.drawable.ic_profile);
         }
 
-        String plan = (member.getPlan() != null && !member.getPlan().isEmpty())
-                ? member.getPlan() : "Not set";
+        String plan = member.getString("plan");
+        if (plan == null || plan.isEmpty()) plan = "Not set";
         tvPlan.setText(plan);
 
-        double weight = member.getWeight();
-        double height = member.getHeight();
+        Object weightObj = member.get("weight");
+        double weight = 0.0;
+        if (weightObj instanceof Number) {
+            weight = ((Number) weightObj).doubleValue();
+        } else if (weightObj instanceof String) {
+            try {
+                weight = Double.parseDouble((String) weightObj);
+            } catch (NumberFormatException e) {
+                weight = 0.0;
+            }
+        }
+        
+        Object heightObj = member.get("height");
+        double height = 0.0;
+        if (heightObj instanceof Number) {
+            height = ((Number) heightObj).doubleValue();
+        } else if (heightObj instanceof String) {
+            try {
+                height = Double.parseDouble((String) heightObj);
+            } catch (NumberFormatException e) {
+                height = 0.0;
+            }
+        }
 
         tvWeight.setText(weight > 0
                 ? String.format(Locale.getDefault(), "%.1f kg", weight)
@@ -227,25 +251,17 @@ public class HomeFragment extends Fragment {
     }
 
     private void loadPrograms() {
-        ApiService apiService = RetrofitClient.getApiService(requireContext().getApplicationContext());
-        apiService.getPrograms().enqueue(new Callback<ProgramsResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<ProgramsResponse> call,
-                                   @NonNull Response<ProgramsResponse> response) {
-                if (!isAdded()) return;
-                if (response.isSuccessful() && response.body() != null
-                        && response.body().isSuccess() && response.body().getData() != null) {
-                    displayPrograms(response.body().getData().getPrograms());
-                }
-                // Programs are secondary — profile data (already shown) matters more,
-                // so we don't show an error banner if only this call fails.
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<ProgramsResponse> call, @NonNull Throwable t) {
-                // Fail silently — same reasoning as above.
-            }
-        });
+        if (!isAdded()) return;
+        List<Program> staticPrograms = new ArrayList<>();
+        staticPrograms.add(new Program("Weight-Training", "Weight Training", "Build muscle and increase strength with structured weight lifting programs.", null));
+        staticPrograms.add(new Program("Cardio-Training", "Cardio Training", "Improve stamina and heart health with treadmill, cycling, and HIIT workouts.", null));
+        staticPrograms.add(new Program("Yoga-Flexibility", "Yoga & Flexibility", "Enhance flexibility, reduce stress, and improve mental focus.", null));
+        staticPrograms.add(new Program("Personal-Training", "Personal Training", "One-on-one coaching tailored to your fitness goals.", null));
+        staticPrograms.add(new Program("Muscle-Gain-Program", "Muscle Gain Program", "12-week structured strength training program focused on hypertrophy.", null));
+        staticPrograms.add(new Program("Fat-Loss-Program", "Fat Loss Program", "8-week transformation plan combining HIIT, cardio, and diet guidance.", null));
+        staticPrograms.add(new Program("Endurance-Training", "Endurance Training", "10-week advanced conditioning program to improve stamina and performance.", null));
+        
+        displayPrograms(staticPrograms);
     }
 
     private void displayPrograms(List<Program> programs) {

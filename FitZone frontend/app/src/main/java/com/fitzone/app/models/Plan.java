@@ -27,6 +27,14 @@ public class Plan {
     @SerializedName("best_value")
     private boolean bestValue;
 
+    public Plan(String id, String name, int price, String duration, boolean bestValue) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.duration = duration;
+        this.bestValue = bestValue;
+    }
+
     public String getId() {
         return id;
     }

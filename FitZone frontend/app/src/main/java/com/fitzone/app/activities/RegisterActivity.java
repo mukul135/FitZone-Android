@@ -28,18 +28,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
 import com.fitzone.app.R;
-import com.fitzone.app.models.RegisterRequest;
-import com.fitzone.app.models.RegisterResponse;
-import com.fitzone.app.network.ApiService;
-import com.fitzone.app.network.RetrofitClient;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Calendar;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import java.util.HashMap;
+import java.util.Map;
 
 // ===============================
 // RegisterActivity.java
@@ -85,6 +81,8 @@ public class RegisterActivity extends AppCompatActivity {
     private String programName; // null if this is a plain (non-program) registration
     private boolean isLoading = false;
 
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
     private ImageView imgProfilePreview;
     private Button btnPickImage;
     private String base64Image = null;
@@ -100,6 +98,9 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
 
         programName = getIntent().getStringExtra(EXTRA_PROGRAM_NAME);
 
@@ -342,57 +343,70 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        RegisterRequest request = new RegisterRequest(
-                fullName, email, mobile, password, confirmPassword, dob, gender,
-                height, weight, goal, plan, medicalInfo, emergencyName, emergencyNumber, base64Image
-        );
-
         setLoading(true);
 
-        ApiService apiService = RetrofitClient.getApiService(getApplicationContext());
-        Call<RegisterResponse> call = TextUtils.isEmpty(programName)
-                ? apiService.register(request)
-                : apiService.registerForProgram(programName, request);
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        // Registration success, store additional details in Firestore
+                        String userId = mAuth.getCurrentUser().getUid();
+                        saveUserDetailsToFirestore(userId, fullName, email, mobile, dob, height, weight, goal, medicalInfo, emergencyName, emergencyNumber, gender, plan);
+                    } else {
+                        // If registration fails, display a message to the user.
+                        setLoading(false);
+                        Log.w("REGISTER_DEBUG", "createUserWithEmail:failure", task.getException());
+                        Toast.makeText(RegisterActivity.this, "Registration failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
 
-        call.enqueue(new Callback<RegisterResponse>() {
-            @Override
-            public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
-                setLoading(false);
-                RegisterResponse body = response.body();
+    private void saveUserDetailsToFirestore(String userId, String fullName, String email, String mobile, String dob, String height, String weight, String goal, String medicalInfo, String emergencyName, String emergencyNumber, String gender, String plan) {
+        Map<String, Object> user = new HashMap<>();
+        user.put("fullname", fullName);
+        user.put("email", email);
+        user.put("mobile", mobile);
+        user.put("dob", dob);
+        
+        try {
+            user.put("height", Double.parseDouble(height));
+        } catch (NumberFormatException e) {
+            user.put("height", 0.0);
+        }
+        
+        try {
+            user.put("weight", Double.parseDouble(weight));
+        } catch (NumberFormatException e) {
+            user.put("weight", 0.0);
+        }
+        user.put("goal", goal);
+        user.put("medical_info", medicalInfo);
+        user.put("emergency_name", emergencyName);
+        user.put("emergency_number", emergencyNumber);
+        user.put("gender", gender);
+        user.put("plan", plan);
+        if (!TextUtils.isEmpty(programName)) {
+            user.put("program_interest", programName);
+        }
+        if (base64Image != null) {
+            user.put("profile_image", base64Image);
+        }
 
-                if (response.isSuccessful() && body != null && body.isSuccess()) {
-                    Toast.makeText(RegisterActivity.this,
-                            "Registration successful. Please log in.", Toast.LENGTH_LONG).show();
-                    // Matches the original app's behavior: redirect to Login
-                    // after registration, do not auto-login (Phase 7 rule #19).
+        db.collection("users").document(userId)
+                .set(user)
+                .addOnSuccessListener(aVoid -> {
+                    setLoading(false);
+                    Toast.makeText(RegisterActivity.this, "Registration successful. Please log in.", Toast.LENGTH_LONG).show();
+                    // Sign out the automatically signed-in user so they have to log in manually as per original logic
+                    mAuth.signOut();
                     startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
                     finish();
-                } else {
-                    try {
-                        if (response.errorBody() != null) {
-                            String errorString = response.errorBody().string();
-                            org.json.JSONObject errorJson = new org.json.JSONObject(errorString);
-                            if (errorJson.has("message")) {
-                                Toast.makeText(RegisterActivity.this, errorJson.getString("message"), Toast.LENGTH_LONG).show();
-                                return;
-                            }
-                        }
-                    } catch (Exception e) {
-                        Log.e("REGISTER_DEBUG", "Error parsing error body", e);
-                    }
-                    Toast.makeText(RegisterActivity.this,
-                            "Registration failed. Please try again.", Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<RegisterResponse> call, Throwable t) {
-                setLoading(false);
-                Toast.makeText(RegisterActivity.this,
-                        "Unable to connect to the server. Please check your internet connection and try again.",
-                        Toast.LENGTH_LONG).show();
-            }
-        });
+                })
+                .addOnFailureListener(e -> {
+                    setLoading(false);
+                    Log.e("REGISTER_DEBUG", "Error saving user data", e);
+                    Toast.makeText(RegisterActivity.this, "Error saving user profile data.", Toast.LENGTH_LONG).show();
+                    // Optionally delete the auth user if db save fails, but for simplicity we keep it.
+                });
     }
 
     private void clearErrors() {

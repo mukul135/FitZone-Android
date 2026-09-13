@@ -10,15 +10,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.fitzone.app.R;
-import com.fitzone.app.models.BaseResponse;
-import com.fitzone.app.models.ChangePasswordRequest;
-import com.fitzone.app.network.ApiService;
-import com.fitzone.app.network.RetrofitClient;
 import com.google.android.material.textfield.TextInputEditText;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class ChangePasswordActivity extends AppCompatActivity {
 
@@ -65,41 +61,35 @@ public class ChangePasswordActivity extends AppCompatActivity {
         btnUpdatePassword.setEnabled(false);
         progressBar.setVisibility(View.VISIBLE);
 
-        ApiService apiService = RetrofitClient.getApiService(getApplicationContext());
-        ChangePasswordRequest request = new ChangePasswordRequest(currentPass, newPass);
-
-        apiService.changePassword(request).enqueue(new Callback<BaseResponse>() {
-            @Override
-            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
-                progressBar.setVisibility(View.GONE);
-                btnUpdatePassword.setEnabled(true);
-
-                if (response.isSuccessful() && response.body() != null) {
-                    Toast.makeText(ChangePasswordActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                    finish();
-                } else {
-                    try {
-                        if (response.errorBody() != null) {
-                            String errorString = response.errorBody().string();
-                            org.json.JSONObject errorJson = new org.json.JSONObject(errorString);
-                            if (errorJson.has("message")) {
-                                Toast.makeText(ChangePasswordActivity.this, errorJson.getString("message"), Toast.LENGTH_LONG).show();
-                                return;
-                            }
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null && user.getEmail() != null) {
+            // Re-authenticate user before changing password
+            AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), currentPass);
+            user.reauthenticate(credential)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            // Proceed to update password
+                            user.updatePassword(newPass)
+                                    .addOnCompleteListener(updateTask -> {
+                                        progressBar.setVisibility(View.GONE);
+                                        btnUpdatePassword.setEnabled(true);
+                                        if (updateTask.isSuccessful()) {
+                                            Toast.makeText(ChangePasswordActivity.this, "Password updated successfully", Toast.LENGTH_SHORT).show();
+                                            finish();
+                                        } else {
+                                            Toast.makeText(ChangePasswordActivity.this, "Failed to update password: " + updateTask.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                        } else {
+                            progressBar.setVisibility(View.GONE);
+                            btnUpdatePassword.setEnabled(true);
+                            Toast.makeText(ChangePasswordActivity.this, "Incorrect current password.", Toast.LENGTH_LONG).show();
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    Toast.makeText(ChangePasswordActivity.this, "Failed to change password. Please check current password.", Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<BaseResponse> call, Throwable t) {
-                progressBar.setVisibility(View.GONE);
-                btnUpdatePassword.setEnabled(true);
-                Toast.makeText(ChangePasswordActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+                    });
+        } else {
+            progressBar.setVisibility(View.GONE);
+            btnUpdatePassword.setEnabled(true);
+            Toast.makeText(this, "User not logged in.", Toast.LENGTH_SHORT).show();
+        }
     }
 }

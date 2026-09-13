@@ -17,19 +17,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.fitzone.app.R;
 import com.fitzone.app.activities.MainActivity;
 import com.fitzone.app.adapters.PlanAdapter;
-import com.fitzone.app.models.MembershipResponse;
 import com.fitzone.app.models.Plan;
-import com.fitzone.app.models.PlansResponse;
-import com.fitzone.app.models.UpdateMembershipRequest;
-import com.fitzone.app.network.ApiService;
-import com.fitzone.app.network.RetrofitClient;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MembershipFragment extends Fragment {
 
@@ -79,29 +75,14 @@ public class MembershipFragment extends Fragment {
     private void loadPlans() {
         showLoading();
 
-        ApiService apiService = RetrofitClient.getApiService(requireContext().getApplicationContext());
-        apiService.getPlans().enqueue(new Callback<PlansResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<PlansResponse> call,
-                                   @NonNull Response<PlansResponse> response) {
-                if (!isAdded()) return;
+        List<Plan> staticPlans = new ArrayList<>();
+        staticPlans.add(new Plan("basic", "Basic", 999, "1 Month", false));
+        staticPlans.add(new Plan("pro", "Pro", 2499, "3 Months", false));
+        staticPlans.add(new Plan("elite", "Elite", 4499, "6 Months", true));
+        staticPlans.add(new Plan("yearly", "Yearly", 7999, "12 Months", false));
 
-                if (response.isSuccessful() && response.body() != null
-                        && response.body().isSuccess() && response.body().getData() != null) {
-                    List<Plan> plans = response.body().getData().getPlans();
-                    displayPlans(plans);
-                    loadMembership(); // secondary call — highlights the current plan
-                } else {
-                    showError(getString(R.string.error_load_plans));
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<PlansResponse> call, @NonNull Throwable t) {
-                if (!isAdded()) return;
-                showError("Network error. Please check your connection.");
-            }
-        });
+        displayPlans(staticPlans);
+        loadMembership(); // secondary call — highlights the current plan
     }
 
     private void displayPlans(List<Plan> plans) {
@@ -127,41 +108,33 @@ public class MembershipFragment extends Fragment {
      * matching HomeFragment's treatment of getPrograms().
      */
     private void loadMembership() {
-        ApiService apiService = RetrofitClient.getApiService(requireContext().getApplicationContext());
-        apiService.getMembership().enqueue(new Callback<MembershipResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<MembershipResponse> call,
-                                   @NonNull Response<MembershipResponse> response) {
-                if (!isAdded()) return;
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            if (getActivity() instanceof MainActivity) {
+                ((MainActivity) getActivity()).logout();
+            }
+            return;
+        }
 
-                if (response.code() == 401) {
-                    // Token invalid/expired — same session-guard behavior as HomeFragment.
-                    if (getActivity() instanceof MainActivity) {
-                        ((MainActivity) getActivity()).logout();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("users").document(user.getUid()).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (!isAdded()) return;
+                    if (documentSnapshot.exists()) {
+                        displayMembership(documentSnapshot);
                     }
-                    return;
-                }
-
-                if (response.isSuccessful() && response.body() != null
-                        && response.body().isSuccess() && response.body().getData() != null) {
-                    displayMembership(response.body().getData());
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<MembershipResponse> call, @NonNull Throwable t) {
-                // Fail silently — plans are already shown, this is a nice-to-have.
-            }
-        });
+                });
     }
 
-    private void displayMembership(MembershipResponse.MembershipData data) {
-        String plan = (data.getPlan() != null && !data.getPlan().isEmpty())
-                ? data.getPlan() : "Not set";
+    private void displayMembership(DocumentSnapshot documentSnapshot) {
+        String plan = documentSnapshot.getString("plan");
+        if (plan == null || plan.isEmpty()) {
+            plan = "Not set";
+        }
         tvMyPlanName.setText(plan);
 
         if (planAdapter != null) {
-            planAdapter.setCurrentPlanDuration(data.getPlan());
+            planAdapter.setCurrentPlanDuration(plan);
             planAdapter.notifyDataSetChanged();
         }
     }
@@ -188,44 +161,32 @@ public class MembershipFragment extends Fragment {
         rvPlans.setEnabled(false);
         Toast.makeText(requireContext(), "Updating membership...", Toast.LENGTH_SHORT).show();
 
-        ApiService apiService = RetrofitClient.getApiService(requireContext().getApplicationContext());
-        UpdateMembershipRequest request = new UpdateMembershipRequest(plan.getDuration());
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            rvPlans.setEnabled(true);
+            if (getActivity() instanceof MainActivity) {
+                ((MainActivity) getActivity()).logout();
+            }
+            return;
+        }
 
-        apiService.updateMembership(request).enqueue(new Callback<MembershipResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<MembershipResponse> call,
-                                   @NonNull Response<MembershipResponse> response) {
-                if (!isAdded()) return;
-                rvPlans.setEnabled(true);
-
-                if (response.code() == 401) {
-                    if (getActivity() instanceof MainActivity) {
-                        ((MainActivity) getActivity()).logout();
-                    }
-                    return;
-                }
-
-                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("users").document(user.getUid())
+                .update("plan", plan.getDuration())
+                .addOnSuccessListener(aVoid -> {
+                    if (!isAdded()) return;
+                    rvPlans.setEnabled(true);
                     Toast.makeText(requireContext(), "Membership updated successfully",
                             Toast.LENGTH_SHORT).show();
                     // Refresh so the new current-plan highlight and "My Membership"
                     // card reflect the change immediately — no app restart needed.
                     loadMembership();
-                } else {
-                    String message = (response.body() != null) ? response.body().getMessage()
-                            : "Unable to update membership.";
-                    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<MembershipResponse> call, @NonNull Throwable t) {
-                if (!isAdded()) return;
-                rvPlans.setEnabled(true);
-                Toast.makeText(requireContext(), "Network error. Please try again.",
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
+                })
+                .addOnFailureListener(e -> {
+                    if (!isAdded()) return;
+                    rvPlans.setEnabled(true);
+                    Toast.makeText(requireContext(), "Failed to update membership.", Toast.LENGTH_SHORT).show();
+                });
     }
 
     private void showLoading() {

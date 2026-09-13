@@ -13,19 +13,11 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.fitzone.app.R;
-import com.fitzone.app.models.LoginData;
-import com.fitzone.app.models.LoginRequest;
-import com.fitzone.app.models.LoginResponse;
-import com.fitzone.app.models.MemberInfo;
-import com.fitzone.app.network.ApiService;
-import com.fitzone.app.network.RetrofitClient;
 import com.fitzone.app.utils.SessionManager;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 import android.util.Log;
 
 // ===============================
@@ -47,6 +39,7 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressBar loadingSpinner;
     private TextView registerLink;
 
+    private FirebaseAuth mAuth;
     private SessionManager sessionManager;
     private boolean isLoading = false;
 
@@ -55,6 +48,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        mAuth = FirebaseAuth.getInstance();
         sessionManager = new SessionManager(getApplicationContext());
 
         emailLayout = findViewById(R.id.layoutEmail);
@@ -105,60 +99,49 @@ public class LoginActivity extends AppCompatActivity {
 
         setLoading(true);
 
-        ApiService apiService = RetrofitClient.getApiService(getApplicationContext());
-        apiService.login(new LoginRequest(email, password)).enqueue(new Callback<LoginResponse>() {
-            @Override
-            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                setLoading(false);
+        setLoading(true);
 
-                LoginResponse body = response.body();
-
-                if (response.isSuccessful() && body != null && body.isSuccess()
-                        && body.getData() != null) {
-                    handleLoginSuccess(body.getData());
-                } else {
-                    try {
-                        if (response.errorBody() != null) {
-                            String errorString = response.errorBody().string();
-                            org.json.JSONObject errorJson = new org.json.JSONObject(errorString);
-                            if (errorJson.has("message")) {
-                                showError(errorJson.getString("message"));
-                                return;
-                            }
-                        }
-                    } catch (Exception e) {
-                        Log.e("LOGIN_DEBUG", "Error parsing error body", e);
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        // Sign in success, fetch user details from Firestore
+                        String userId = mAuth.getCurrentUser().getUid();
+                        fetchUserDetailsAndSaveSession(userId);
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        setLoading(false);
+                        Log.w("LOGIN_DEBUG", "signInWithEmail:failure", task.getException());
+                        showError("Authentication failed: " + task.getException().getMessage());
                     }
-                    showError("Login failed. Please try again.");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<LoginResponse> call, Throwable t) {
-                setLoading(false);
-                // Network unreachable, server down, timeout, malformed
-                // response, etc. Never show the raw exception to the user.
-                Log.e("LOGIN_DEBUG", "Network error", t);
-                showError("Unable to connect to the server. Please check your internet connection and try again.");
-            }
-        });
+                });
     }
 
-    private void handleLoginSuccess(LoginData data) {
-        MemberInfo member = data.getMember();
-        if (member == null) {
-            showError("Unexpected server response. Please try again.");
-            return;
-        }
-
-        sessionManager.saveSession(data.getToken(), member.getId(), member.getFullname());
-
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        // Clears LoginActivity (and anything below it) off the back stack,
-        // so pressing Back from Home never returns to Login.
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
+    private void fetchUserDetailsAndSaveSession(String userId) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("users").document(userId).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    setLoading(false);
+                    if (documentSnapshot.exists()) {
+                        String fullname = documentSnapshot.getString("fullname");
+                        int internalId = 0; // We can't guarantee an integer ID with Firebase, so we just pass 0 for now. The backend shouldn't need it.
+                        // Or you could change SessionManager to accept a String ID, but for now this works.
+                        sessionManager.saveSession(userId, internalId, fullname != null ? fullname : "User");
+                        
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        showError("User data not found in database.");
+                        mAuth.signOut();
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    setLoading(false);
+                    Log.e("LOGIN_DEBUG", "Error fetching user data", e);
+                    showError("Error fetching user data.");
+                    mAuth.signOut();
+                });
     }
 
     private void setLoading(boolean loading) {
