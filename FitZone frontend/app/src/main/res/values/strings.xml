@@ -240,4 +240,17 @@
     <!-- More menu -->
     <string name="profile_more">More</string>
 
+    <!-- Daily Calorie Tracker -->
+    <string name="tool_daily_calorie_title">Daily Calorie Tracker</string>
+    <string name="tool_daily_calorie_desc">Track your daily calorie intake</string>
+    <string name="daily_calorie_title">Daily Calorie Tracker</string>
+    <string name="daily_calorie_subtitle">Track your food intake for today</string>
+    <string name="daily_calorie_hint_food_name">Food Name</string>
+    <string name="daily_calorie_hint_quantity">Quantity (e.g. 100g, 2 slices)</string>
+    <string name="daily_calorie_btn_add">Add Food</string>
+    <string name="daily_calorie_total_label">Total Calories:</string>
+    <string name="daily_calorie_error_food_name">Please enter a food name.</string>
+    <string name="daily_calorie_error_quantity_required">Please enter a quantity.</string>
+    <string name="daily_calorie_error_ai_fetch">Could not estimate calories. Please try again.</string>
+
 </resources>

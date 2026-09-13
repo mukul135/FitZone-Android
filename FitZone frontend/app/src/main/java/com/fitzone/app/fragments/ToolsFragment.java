@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,10 +26,12 @@ public class ToolsFragment extends Fragment {
 
         view.findViewById(R.id.cardBmi).setOnClickListener(v -> openFragment(new BmiCalculatorFragment()));
         view.findViewById(R.id.cardCalorie).setOnClickListener(v -> openFragment(new CalorieCalculatorFragment()));
+        view.findViewById(R.id.cardDailyCalorie).setOnClickListener(v -> openFragment(new DailyCalorieTrackerFragment()));
         view.findViewById(R.id.cardDiet).setOnClickListener(v -> openFragment(new DietPlannerFragment()));
 
         // AI Workout Planner — held back pending generate_workout() source
-        view.findViewById(R.id.cardWorkout).setOnClickListener(v -> openFragment(new AiWorkoutPlannerFragment()));    }
+        view.findViewById(R.id.cardWorkout).setOnClickListener(v -> openFragment(new AiWorkoutPlannerFragment()));
+    }
 
     private void openFragment(Fragment fragment) {
         requireActivity()
@@ -40,6 +41,4 @@ public class ToolsFragment extends Fragment {
                 .addToBackStack(null)
                 .commit();
     }
-
-
 }

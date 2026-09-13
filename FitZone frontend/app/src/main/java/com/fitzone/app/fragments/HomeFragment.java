@@ -40,7 +40,7 @@ public class HomeFragment extends Fragment {
     private TextView tvGreeting, tvGoal, tvPlan, tvWeight, tvBmi,
             tvFitnessGoal, tvSeeAll, tvErrorMessage;
     private ImageView ivAvatar;
-    private MaterialCardView cardBmi, cardCalories, cardDietPlan, cardWorkoutSchedule;
+    private MaterialCardView cardBmi, cardCalories, cardDietPlan, cardWorkoutSchedule, cardDailyCalorieTracker;
     private Button btnViewMembership, btnRetry;
     private ProgressBar progressBarHome;
     private View layoutError, scrollContent;
@@ -75,6 +75,7 @@ public class HomeFragment extends Fragment {
         cardCalories = view.findViewById(R.id.cardCalories);
         cardDietPlan = view.findViewById(R.id.cardDietPlan);
         cardWorkoutSchedule = view.findViewById(R.id.cardWorkoutSchedule);
+        cardDailyCalorieTracker = view.findViewById(R.id.cardDailyCalorieTracker);
 
         tvSeeAll = view.findViewById(R.id.tvSeeAll);
         rvPrograms = view.findViewById(R.id.rvPrograms);
@@ -128,6 +129,15 @@ public class HomeFragment extends Fragment {
             cardWorkoutSchedule.setOnClickListener(v -> {
                 requireActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragmentContainer, new AiWorkoutPlannerFragment())
+                        .addToBackStack(null)
+                        .commit();
+            });
+        }
+        
+        if (cardDailyCalorieTracker != null) {
+            cardDailyCalorieTracker.setOnClickListener(v -> {
+                requireActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragmentContainer, new DailyCalorieTrackerFragment())
                         .addToBackStack(null)
                         .commit();
             });
